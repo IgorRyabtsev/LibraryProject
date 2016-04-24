@@ -1,0 +1,93 @@
+<%@ page language="java" contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<html lang="ru">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<head>
+    <title><fmt:message key="Library_name"/></title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <!-- Bootstrap -->
+    <!-- Bootstrap core CSS -->
+
+    <link href="/css/signin.css" rel="stylesheet">
+    <link href="/css/one-page-wonder.css" rel="stylesheet">
+    <link href="/css/bootstrap.css" rel="stylesheet">
+    <link href="/js/bootstrap.js" rel="stylesheet">
+    <link href="/js/npm.js" rel="stylesheet">
+    <link href="/css/navbar.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <jsp:useBean id="user_session" class="main.java.controllers.model.Reader" scope="session"/>
+
+</head>
+<body>
+
+<%--<c:if test="${user_session.role == null}">--%>
+<%--<li><a href="/signin">LOLNULL</a></li>--%>
+<%--</c:if>--%>
+<%--<c:if test="${user_session.role != null}">--%>
+<%--<li><a href="/signout">LOLNOTNULL</a></li>--%>
+    <%--${user_session.email}--%>
+<%--</c:if>--%>
+
+
+<div class="container">
+    <%--<h1>Image!</h1>--%>
+    <!-- Static navbar -->
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/index.jsp"> <fmt:message key="main.s"/></a>
+            </div>
+            <div class="navbar-collapse collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li><a href="/all_books"><fmt:message key="look_all"/></a></li>
+                    <%--<li><a href="/main.jsp">Something</a></li>--%>
+                    <%--<li><a href="/main.jsp">Something</a></li>--%>
+
+
+                    <%--<li><a href="/admin/tariff_list">Role  :  <c:out value="${user_session.role}" /></a></li>--%>
+
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <c:if test="${user_session.role == null}">
+                        <li><a href="/signin"><fmt:message key="signin"/></a></li>
+                        <li><a href="/signin"><fmt:message key="signup"/></a></li>
+                    </c:if>
+                    <c:if test="${user_session.role != null}">
+                        <li><a href="/signin"><fmt:message key="signout"/></a></li>
+                    </c:if>
+                    <%----%>
+                    <%--<li><a href="/signin">signin</a></li>--%>
+                    <%--<li><a href="/signout">signout</a></li>--%>
+
+                    <li class="dropdown">
+                        <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                           aria-haspopup="true"
+                           aria-expanded="false"><fmt:message key="language"/><span class="caret"></span></a>
+
+                        <ul class="dropdown-menu">
+                            <li><a href="/change_locale?locale=ru_RU"><fmt:message key="lang_ru"/></a></li>
+                            <li><a href="/change_locale?locale=en_US"><fmt:message key="lang_en"/></a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div><!--/.nav-collapse -->
+        </div><!--/.container-fluid -->
+    </nav>
