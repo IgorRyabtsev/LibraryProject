@@ -30,7 +30,7 @@
 
 </head>
 <body>
-
+${user_session.role} ${user_session.email} ${user_session.namer_f} ${user_session.namer_s} ${user_session.namer_p}
 <%--<c:if test="${user_session.role == null}">--%>
 <%--<li><a href="/signin">LOLNULL</a></li>--%>
 <%--</c:if>--%>
@@ -38,7 +38,6 @@
 <%--<li><a href="/signout">LOLNOTNULL</a></li>--%>
     <%--${user_session.email}--%>
 <%--</c:if>--%>
-
 
 <div class="container">
     <%--<h1>Image!</h1>--%>
@@ -67,11 +66,11 @@
 
                 <ul class="nav navbar-nav navbar-right">
                     <c:if test="${user_session.role == null}">
-                        <li><a href="/signin"><fmt:message key="signin"/></a></li>
-                        <li><a href="/signin"><fmt:message key="signup"/></a></li>
+                        <li><a href="/login"><fmt:message key="signin"/></a></li>
+                        <li><a href="/signup"><fmt:message key="signup"/></a></li>
                     </c:if>
                     <c:if test="${user_session.role != null}">
-                        <li><a href="/signin"><fmt:message key="signout"/></a></li>
+                        <li><a href="/signout"><fmt:message key="signout"/></a></li>
                     </c:if>
                     <%----%>
                     <%--<li><a href="/signin">signin</a></li>--%>
