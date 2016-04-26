@@ -1,7 +1,7 @@
 <jsp:useBean id="instAuth" scope="request"
              type="java.util.Map.Entry<main.java.controllers.model.Instance, java.util.List<main.java.controllers.model.Author>>"/>
 
-<h1><fmt:message key="orders.order"/>:</h1>
+<h1><fmt:message key="orders.delete"/>:</h1>
 <div class="row">
     <div class="col-md-6">
         <div class="col-lg-12">
@@ -25,8 +25,8 @@
                                     <c:forEach items="${instAuth.value}" var="authors">
                                         ${authors.name_f} ${authors.name_s} ${authors.name_p} <br>
                                     </c:forEach>
-                                <form name="orderBook" id="order" action="/orderbook?id=${instAuth.key.id_i}" method="post">
-                                    <button type="submit" class="btn btn-info btn-lg btn-block"><fmt:message key="orders.button"/></button>
+                                <form name="deleteBook" id="order" action="/deleteuserorder?id=${instAuth.key.id_i}&publish=${instAuth.key.publish}" method="post">
+                                    <button type="submit" class="btn btn-info btn-lg btn-block"><fmt:message key="orders.delete_button"/></button>
                                 </form>
                             </td>
                         </tr>
@@ -36,6 +36,6 @@
         </div>
     </div>
     <div class="col-md-6">
-        <img class="img-responsive img-rounded" src="../img/mainPageFont55.png" alt="Central library">
+        <img class="img-responsive img-rounded" src="../img/manPageFont6.jpg" alt="Central library">
     </div>
 </div>

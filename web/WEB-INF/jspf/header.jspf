@@ -59,6 +59,9 @@ ${user_session.role} ${user_session.email} ${user_session.namer_f} ${user_sessio
                     <c:if test="${user_session.role != null}">
                         <li><a href="/avaliablebooks"><fmt:message key="avaliablebook"/></a></li>
                     </c:if>
+                    <c:if test="${user_session.role != null}">
+                        <li><a href="/userorders"><fmt:message key="userorders"/></a></li>
+                    </c:if>
                     <%--<li><a href="/main.jsp">Something</a></li>--%>
                     <%--<li><a href="/main.jsp">Something</a></li>--%>
 

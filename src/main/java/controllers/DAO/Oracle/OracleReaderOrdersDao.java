@@ -1,7 +1,9 @@
 package main.java.controllers.DAO.Oracle;
 
 
+import main.java.controllers.DAO.Connections;
 import main.java.controllers.DAO.interfaces.ReaderOrdersDao;
+import main.java.controllers.model.Author;
 import main.java.controllers.model.Book;
 import main.java.controllers.model.Instance;
 import main.java.controllers.model.Reader;
@@ -79,6 +81,32 @@ public class OracleReaderOrdersDao implements ReaderOrdersDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public List<Map.Entry<Instance, List<Author>>> getInstancesByReader(Reader r) {
+        List<Map.Entry<Instance, List<Author>>> instances = new ArrayList<>();
+        List<Instance> listOfOrders = getListOfOrdersByEmail(r.getEmail());
+        for (Instance inst:listOfOrders) {
+            instances.add(Connections.getFactory().getInstanceDao().getInstanceById(inst.getId_i()));
+        }
+        return instances;
+    }
+
+    @Override
+    public boolean deleteOrderByReader(Reader reader, Book book, String publish){
+        try(final Connection connection = OracleDAOFactory.getConnection();
+            final Statement statement = connection.createStatement()){
+
+            return statement.executeUpdate(
+                    "Delete from Ordnum where numreader = " + reader.getId_r() + " " +
+                            "and booko_id=" + book.getId_b() + " and publish_o='" + publish +
+                            "' and rownum=1") > 0 ? true : false;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+//        return false;
     }
 
 }
