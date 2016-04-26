@@ -12,6 +12,14 @@ public class Instance {
     private int status;
     private String comments;
 
+    public Instance() {
+        this.id_i = -1;
+        this.book = null;
+        this.year_b = 0;
+        this.publish = null;
+        this.cost=0;
+    }
+
     public Instance(int id_i, Book book, int year_b, String publish, int cost, int status, String comments) {
         this.id_i = id_i;
         this.book = book;

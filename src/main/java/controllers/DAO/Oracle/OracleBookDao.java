@@ -72,11 +72,6 @@ public class OracleBookDao implements BookDao {
     @Override
     public boolean insertBook(Book book) {
         if (book == null) return false;
-//        BookCondition bookCondition = Connections.getFactory().getBookConditionDao();
-//        bookCondition.setName_b(book.getName_b());
-//        if(findByCondition(bookCondition)) {
-//            return false;
-//        }
         try(final Connection connection = OracleDAOFactory.getConnection();
             final Statement statement = connection.createStatement()){
 

@@ -33,7 +33,7 @@ public class LogIn extends HttpServlet {
             return;
         }
 
-        System.out.println(readerByEmail);
+//        System.out.println(readerByEmail);
 
         if(readerByEmail.getPassword().equals(EncodingPassword.hash(password))) {
             HttpSession session = request.getSession();

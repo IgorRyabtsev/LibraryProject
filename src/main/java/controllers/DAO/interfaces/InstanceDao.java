@@ -12,6 +12,7 @@ import java.util.Map;
 public interface InstanceDao {
     List< Map<Instance, List<Author>> > getAll();
     List< Map<Instance, List<Author>> > getInstanceByName(String name, int status);
+    Map.Entry<Instance,List<Author>> getInstanceById(int id);
     public List<Map<Instance, List<Author>>> getInstanceByNameV2(String name, int status);
     boolean insertInstance(Author author, Instance r);
     boolean deleteInstanceById(int id);

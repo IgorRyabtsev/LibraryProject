@@ -1,6 +1,8 @@
 package main.java.controllers.DAO.interfaces;
 
+import main.java.controllers.model.Book;
 import main.java.controllers.model.Instance;
+import main.java.controllers.model.Reader;
 
 import java.util.List;
 
@@ -9,5 +11,5 @@ import java.util.List;
  */
 public interface ReaderOrdersDao {
     List<Instance> getListOfOrdersByEmail(String email);
-
+    boolean insertOrder(Reader reader, Instance instance);
 }

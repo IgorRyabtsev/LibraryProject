@@ -4,6 +4,7 @@ package main.java.controllers.DAO.Oracle;
 import main.java.controllers.DAO.interfaces.ReaderOrdersDao;
 import main.java.controllers.model.Book;
 import main.java.controllers.model.Instance;
+import main.java.controllers.model.Reader;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -64,4 +65,20 @@ public class OracleReaderOrdersDao implements ReaderOrdersDao {
         }
         return inst;
     }
+
+    @Override
+    public boolean insertOrder(Reader reader, Instance instance) {
+        if (reader == null || instance == null) return false;
+        try(final Connection connection = OracleDAOFactory.getConnection();
+            final Statement statement = connection.createStatement()){
+
+            return statement.executeUpdate(
+                    "insert into OrdNum (numreader, booko_id, publish_o) " +
+                            "values (" + reader.getId_r() +", " + instance.getBook().getId_b() + ", '" + instance.getPublish() + "')") > 0 ? true : false;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

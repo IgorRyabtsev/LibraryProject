@@ -43,8 +43,6 @@
             </div>
         </div>
 
-    <c:if test="${user_session.role == null}">
-
         <div class="col-md-4">
             <div class="col-lg-12">
                 <div class="panel panel-success">
@@ -59,8 +57,9 @@
                         <tr>
                             <td>
                                 <div >
-                                    <h4> <fmt:message key='allbook.info'/></h4>
-                                    <p>	<br>
+                                    <c:if test="${user_session.role == null}">
+                                        <h4> <fmt:message key='allbook.info'/></h4>
+                                    </c:if>
                                         <fmt:message key='allbook.adress'/><br>
                                     </p>
                                     <p>	<br>
@@ -82,8 +81,6 @@
                 </div>
             </div>
         </div>
-
-    </c:if>
         <!-- /.col-md-4 -->
     </div>
 <!-- /.row -->

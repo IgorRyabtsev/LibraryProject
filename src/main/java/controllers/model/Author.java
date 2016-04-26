@@ -10,6 +10,13 @@ public class Author {
     private final String name_p;
     private int year_a;
 
+    public Author() {
+        this.id_a = -1;
+        this.name_f = null;
+        this.name_s = null;
+        this.name_p = null;
+    }
+
     public Author(int id_a, String name_f, String name_s, String name_p, int year_a) {
         this.id_a = id_a;
         this.name_f = name_f;

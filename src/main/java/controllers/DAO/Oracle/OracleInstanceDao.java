@@ -11,15 +11,58 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by igor on 21.04.16.
  */
 public class OracleInstanceDao implements InstanceDao {
+
+    @Override
+    public Map.Entry<Instance,List<Author>> getInstanceById(int id) {
+        Instance instance = new Instance();
+        List<Author> authors = new ArrayList<>();
+        try(final Connection connection = OracleDAOFactory.getConnection();
+            final Statement statement = connection.createStatement();
+            final ResultSet rs = statement.executeQuery(
+                    "SELECT id_i, id_book, year_b, publish, cost, status, comments, name_b FROM Instance join Book on " +
+                            "id_book=id_b where id_i=" + id)) {
+            while (rs.next()) {
+                instance = new Instance(rs.getInt("id_i"),
+                                new Book(rs.getInt("id_book"),rs.getString("name_b")),
+                                rs.getInt("year_b"),
+                                rs.getString("publish"),
+                                rs.getInt("cost"),
+                                rs.getInt("status"),
+                                rs.getString("comments"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        if(instance.getPublish()==null) return null;
+
+        try(final Connection connection = OracleDAOFactory.getConnection();
+            final Statement statement = connection.createStatement();
+            final ResultSet rs = statement.executeQuery(
+                    "SELECT distinct id_a, name_f, name_s, name_p, year_a  FROM " +
+                            "((Instance join AuBook on id_book=book_id) join Author on id_a=author_id) " +
+                            "where id_book = " + instance.getBook().getId_b())) {
+            while (rs.next()) {
+                authors.add(new Author(rs.getInt("id_a"),
+                        rs.getString("name_f"),
+                        rs.getString("name_s"),
+                        rs.getString("name_p"),
+                        rs.getInt("year_a")));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        if(authors.isEmpty()) return null;
+
+        Map.Entry<Instance,List<Author>> instAuth = new AbstractMap.SimpleEntry<>(instance, authors);
+        return instAuth;
+    }
 
     @Override
     public List<Map<Instance, List<Author>>> getAll() {
