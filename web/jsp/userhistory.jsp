@@ -1,9 +1,8 @@
-<jsp:useBean id="instances" scope="request"
-             type="java.util.List<java.util.Map.Entry<main.java.controllers.model.Instance,
-                                    java.util.List<main.java.controllers.model.Author>>>"/>
+<jsp:useBean id="history" scope="request"
+             type="java.util.List<main.java.controllers.model.Orders>"/>
 
-<h2><fmt:message key='user.orders'/></h2>
 
+<h2><fmt:message key='userhistory'/></h2>
 <div class="row">
     <div class="col-md-8">
         <div class="row">
@@ -13,23 +12,28 @@
                         <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                             <thead>
                             <tr>
-                                <th><fmt:message key='author'/></th>
+                                <%--<th><fmt:message key='author'/></th>--%>
                                 <th><fmt:message key='book'/></th>
                                 <th><fmt:message key='year'/></th>
                                 <th><fmt:message key='publish'/></th>
+                                <th><fmt:message key='release_date'/></th>
+                                <th><fmt:message key='return_date'/></th>
+
                             </tr>
                             </thead>
                             <tbody>
-                            <c:forEach items="${instances}" var="inst">
-                                    <tr>
-                                        <td><c:forEach items="${inst.value}" var="au">
-                                            ${au.name_f} ${au.name_s} ${au.name_p} <br>
-                                        </c:forEach>
-                                        </td>
-                                        <td><a href="/deleteuserorder?id=${inst.key.id_i}&publish=${inst.key.publish}"> ${inst.key.book.name_b} </a></td>
-                                        <td>${inst.key.year_b}</td>
-                                        <td>${inst.key.publish}</td>
-                                    </tr>
+                            <c:forEach items="${history}" var="hist">
+                                <tr>
+                                    <%--<td><c:forEach items="${inst.value}" var="au">--%>
+                                        <%--${au.name_f} ${au.name_s} ${au.name_p} <br>--%>
+                                    <%--</c:forEach>--%>
+                                    </td>
+                                    <td> ${hist.instance.book.name_b} </a></td>
+                                    <td> ${hist.instance.year_b}</td>
+                                    <td> ${hist.instance.publish}</td>
+                                    <td> ${hist.release_date}</td>
+                                    <td> ${hist.return_date}</td>
+                                </tr>
                             </c:forEach>
                             </tbody>
                         </table>

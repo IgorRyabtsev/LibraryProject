@@ -87,6 +87,7 @@ public class OracleReaderOrdersDao implements ReaderOrdersDao {
     public List<Map.Entry<Instance, List<Author>>> getInstancesByReader(Reader r) {
         List<Map.Entry<Instance, List<Author>>> instances = new ArrayList<>();
         List<Instance> listOfOrders = getListOfOrdersByEmail(r.getEmail());
+        if(listOfOrders==null ) return new ArrayList<>();;
         for (Instance inst:listOfOrders) {
             instances.add(Connections.getFactory().getInstanceDao().getInstanceById(inst.getId_i()));
         }

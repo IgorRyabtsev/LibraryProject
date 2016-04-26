@@ -12,6 +12,10 @@ public class Orders {
     private Date release_date;
     private Date return_date;
 
+    public Orders() {
+        id_o=-1;
+    }
+
     public Orders(int id_o, Reader reader, Instance instance, Date release_date, Date return_date) {
         this.id_o = id_o;
         this.reader = reader;
