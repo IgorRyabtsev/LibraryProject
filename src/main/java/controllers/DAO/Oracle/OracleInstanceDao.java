@@ -69,67 +69,64 @@ public class OracleInstanceDao implements InstanceDao {
         return getInstanceByNameV2(null,0);
     }
 
-    // second parameter 0 want to see all instanses, 1 instances, that present
-    @Override
-    public List<Map<Instance, List<Author>>> getInstanceByName(String name, int status) {
-        String additional;
-        if(name == null) {
-            additional="";
-        } else {
-            additional = "where name_b = '"+ name +"' and status  " + ((status==1) ? "=1" : ">=0");
-        }
-        List<Map<Instance, List<Author>>> instances = new ArrayList<>();
-
-        List<Instance> inst = new ArrayList<>();
-        try(final Connection connection = OracleDAOFactory.getConnection();
-            final Statement statement = connection.createStatement();
-            final ResultSet rs = statement.executeQuery(
-                    "SELECT id_i, id_book, year_b, publish, cost, status, comments, name_b FROM Instance join Book on " +
-                            "id_book=id_b " + additional)) {
-            while (rs.next()) {
-                inst.add(new Instance(rs.getInt("id_i"),
-                        new Book(rs.getInt("id_book"),rs.getString("name_b")),
-                        rs.getInt("year_b"),
-                        rs.getString("publish"),
-                        rs.getInt("cost"),
-                        rs.getInt("status"),
-                        rs.getString("comments")));
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        //if no instances
-        if(inst.isEmpty()) return null;
-
-        Map<Instance, List<Author>> mapinst;
-        List<Author> auth;
-        for (Instance instance: inst) {
-            mapinst = new HashMap<>();
-            auth = new ArrayList<>();
-
-            try(final Connection connection = OracleDAOFactory.getConnection();
-                final Statement statement = connection.createStatement();
-                final ResultSet rs = statement.executeQuery(
-                        "SELECT distinct id_a, name_f, name_s, name_p, year_a  FROM ((Instance join AuBook on id_book=book_id) join Author on id_a=author_id) " +
-                                "where id_book = " + instance.getBook().getId_b())) {
-                while (rs.next()) {
-                    auth.add(new Author(rs.getInt("id_a"),
-                            rs.getString("name_f"),
-                            rs.getString("name_s"),
-                            rs.getString("name_p"),
-                            rs.getInt("year_a")));
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-//            System.out.println(instance);
-//            System.out.println(auth);
-//            System.out.println("*****************************");
-            mapinst.put(instance,auth);
-            instances.add(mapinst);
-        }
-        return instances;
-    }
+//    // second parameter 0 want to see all instanses, 1 instances, that present
+//    @Override
+//    public List<Map<Instance, List<Author>>> getInstanceByName(String name, int status) {
+//        String additional;
+//        if(name == null) {
+//            additional="";
+//        } else {
+//            additional = "where name_b = '"+ name +"' and status  " + ((status==1) ? "=1" : ">=0");
+//        }
+//        List<Map<Instance, List<Author>>> instances = new ArrayList<>();
+//
+//        List<Instance> inst = new ArrayList<>();
+//        try(final Connection connection = OracleDAOFactory.getConnection();
+//            final Statement statement = connection.createStatement();
+//            final ResultSet rs = statement.executeQuery(
+//                    "SELECT id_i, id_book, year_b, publish, cost, status, comments, name_b FROM Instance join Book on " +
+//                            "id_book=id_b " + additional)) {
+//            while (rs.next()) {
+//                inst.add(new Instance(rs.getInt("id_i"),
+//                        new Book(rs.getInt("id_book"),rs.getString("name_b")),
+//                        rs.getInt("year_b"),
+//                        rs.getString("publish"),
+//                        rs.getInt("cost"),
+//                        rs.getInt("status"),
+//                        rs.getString("comments")));
+//            }
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//        //if no instances
+//        if(inst.isEmpty()) return new ArrayList<>();;
+//
+//        Map<Instance, List<Author>> mapinst;
+//        List<Author> auth;
+//        for (Instance instance: inst) {
+//            mapinst = new HashMap<>();
+//            auth = new ArrayList<>();
+//
+//            try(final Connection connection = OracleDAOFactory.getConnection();
+//                final Statement statement = connection.createStatement();
+//                final ResultSet rs = statement.executeQuery(
+//                        "SELECT distinct id_a, name_f, name_s, name_p, year_a  FROM ((Instance join AuBook on id_book=book_id) join Author on id_a=author_id) " +
+//                                "where id_book = " + instance.getBook().getId_b())) {
+//                while (rs.next()) {
+//                    auth.add(new Author(rs.getInt("id_a"),
+//                            rs.getString("name_f"),
+//                            rs.getString("name_s"),
+//                            rs.getString("name_p"),
+//                            rs.getInt("year_a")));
+//                }
+//            } catch (SQLException e) {
+//                throw new RuntimeException(e);
+//            }
+//            mapinst.put(instance,auth);
+//            instances.add(mapinst);
+//        }
+//        return instances;
+//    }
 
     @Override
     public List<Map<Instance, List<Author>>> getInstanceByNameV2(String name, int status) {
@@ -160,7 +157,7 @@ public class OracleInstanceDao implements InstanceDao {
             throw new RuntimeException(e);
         }
         //if no instances
-        if(inst.isEmpty()) return null;
+        if(inst.isEmpty()) return new ArrayList<>();;
 
         List<AuthBook> authbooks=new ArrayList<>();
         try(final Connection connection = OracleDAOFactory.getConnection();
@@ -182,8 +179,7 @@ public class OracleInstanceDao implements InstanceDao {
             throw new RuntimeException(e);
         }
 
-        if(authbooks.isEmpty()) return null;
-
+        if(authbooks.isEmpty()) return new ArrayList<>();
 
         Map<Instance, List<Author>> mapinst;
         List<Author> auth;
@@ -199,6 +195,93 @@ public class OracleInstanceDao implements InstanceDao {
             instances.add(mapinst);
         }
         return instances;
+    }
+
+    @Override
+    public List<Map<Instance, List<Author>>> getInstanceByCondition(Author author, Book book) {
+        String additionalForBook;
+        String additionalForAuthors;
+        additionalForBook=parseForBook(book);
+        additionalForAuthors=parseForAuthors(author);
+        List<Map<Instance, List<Author>>> instances = new ArrayList<>();
+
+        List<Instance> inst = new ArrayList<>();
+        try(final Connection connection = OracleDAOFactory.getConnection();
+            final Statement statement = connection.createStatement();
+            final ResultSet rs = statement.executeQuery(
+                    "SELECT id_i, id_book, year_b, publish, cost, status, comments, name_b FROM (Instance join Book on " +
+                            "id_book=id_b) " + additionalForBook+" 1=1 and id_b in " +
+                            "(select au.book_id from ((Author auth join AuBook au on auth.id_a=au.author_id) join Instance inst on " +
+                            "inst.id_book=au.book_id )" +
+                            additionalForAuthors + " 1=1)")) {
+            while (rs.next()) {
+                inst.add(new Instance(rs.getInt("id_i"),
+                        new Book(rs.getInt("id_book"),rs.getString("name_b")),
+                        rs.getInt("year_b"),
+                        rs.getString("publish"),
+                        rs.getInt("cost"),
+                        rs.getInt("status"),
+                        rs.getString("comments")));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println(inst);
+        //if no instances
+        if(inst.isEmpty()) return new ArrayList<>();;
+
+        List<AuthBook> authbooks=new ArrayList<>();
+        try(final Connection connection = OracleDAOFactory.getConnection();
+            final Statement statement = connection.createStatement();
+            final ResultSet rs = statement.executeQuery(
+                    "SELECT id_a, name_f, name_s, name_p, year_a, id_b, name_b  FROM ((Book join AuBook on book_id=id_b) join Author on " +
+                            "id_a=author_id) " + additionalForAuthors + " 1=1")) {
+            while (rs.next()) {
+                authbooks.add(new AuthBook
+                        (new Author(rs.getInt("id_a"),
+                                rs.getString("name_f"),
+                                rs.getString("name_s"),
+                                rs.getString("name_p"),
+                                rs.getInt("year_a")),
+                                new Book(rs.getInt("id_b"),
+                                        rs.getString("name_b"))));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        if(authbooks.isEmpty()) return new ArrayList<>();
+
+        Map<Instance, List<Author>> mapinst;
+        List<Author> auth;
+        for (Instance instance: inst) {
+            auth = new ArrayList<>();
+            mapinst = new HashMap<>();
+            for (AuthBook au : authbooks) {
+                if (instance.getBook().getId_b() == au.getBook().getId_b()) {
+                    auth.add(au.getAuthor());
+                }
+            }
+            mapinst.put(instance, auth);
+            instances.add(mapinst);
+        }
+        return instances;
+    }
+
+    private String parseForAuthors(Author author) {
+        StringBuffer expression = new StringBuffer(" where ");
+        String tmp;
+        if(!(tmp = author.getName_f()).isEmpty()) expression.append(" name_f='" + tmp + "' and");
+        if(!(tmp = author.getName_s()).isEmpty()) expression.append(" name_s='" + tmp + "' and");
+        if(!(tmp = author.getName_p()).isEmpty()) expression.append(" name_p='" + tmp + "' and");
+        return expression.toString();
+    }
+
+    private String parseForBook(Book book) {
+        StringBuffer expression = new StringBuffer(" where ");
+        String tmp;
+        if(!(tmp = book.getName_b()).isEmpty()) expression.append(" name_b='" + tmp + "' and ");
+        return expression.toString();
     }
 
 

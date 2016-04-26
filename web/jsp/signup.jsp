@@ -11,7 +11,7 @@
                 <div class="control-group form-group">
                     <div class="controls">
                         <label><fmt:message key="registration.namef"/>:</label>
-                        <input type="tel" name="namef" class="form-control" id="namef" required
+                        <input type="text" name="namef" class="form-control" id="namef" required
                                data-validation-required-message="Please enter your first number.">
                     </div>
                 </div>

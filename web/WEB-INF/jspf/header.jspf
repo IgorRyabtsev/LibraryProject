@@ -30,7 +30,7 @@
 
 </head>
 <body>
-${user_session.role} ${user_session.email} ${user_session.namer_f} ${user_session.namer_s} ${user_session.namer_p}
+
 <%--<c:if test="${user_session.role == null}">--%>
 <%--<li><a href="/signin">LOLNULL</a></li>--%>
 <%--</c:if>--%>

@@ -41,45 +41,47 @@
         </div>
     </div>
 
-           <div class="col-md-4">
-            <div class="col-lg-12">
-                <div class="panel panel-success">
-                    <div class="panel-body">
-                        <table class="table table-striped table-bordered table-hover" id="dataTables-example2">
-                            <thead>
-                            <tr>
-                                <th><h3><fmt:message key='allbook.info.header'/></h3></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>
-                                    <div >
-                                        <c:if test="${user_session.role == null}">
-                                            <h4> <fmt:message key='allbook.info'/></h4>
-                                        </c:if>
-                                        <p>	<br>
-                                            <fmt:message key='allbook.adress'/><br>
-                                        </p>
-                                        <p>	<br>
-                                            <fmt:message key='allbook.street'/><br>
-                                        </p>
-                                        <p>	<br>
-                                            <fmt:message key='allbook.number'/><br>
-                                        </p>
-                                        <p>	<br>
-                                            <fmt:message key='allbook.email'/><br>
-                                        </p>
-                                    </div>
-                                </td>
-                            </tr>
+    <div class="col-md-4">
+        <div class="col-lg-12">
+            <div class="panel panel-success">
+                <div class="panel-body">
+                    <table class="table table-striped table-bordered table-hover" id="dataTables-example2">
+                        <thead>
+                        <tr>
+                            <th><fmt:message key='allbooks.search'/></th>
 
-                            </tbody>
-                        </table>
-                    </div>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>
+                                <div >
+                                    <form name="searchbooks" id="contactForm" action="/searchbook" method="post">
+                                        <div class="form-group">
+                                            <fmt:message key='author'/>:<br>
+                                            <label class="control-label" for="namef" id=""><fmt:message key='allbooks.namef'/></label>
+                                            <input class="form-control input-sm" type="text" id="namef" name="namef">
+                                            <label class="control-label" for="names"><fmt:message key='allbooks.names'/></label>
+                                            <input class="form-control input-sm" type="text" id="names" name="names">
+                                            <label class="control-label" for="namep"><fmt:message key='allbooks.namep'/></label>
+                                            <input class="form-control input-sm" type="text" id="namep" name="namep">
+                                            <br>
+                                            <fmt:message key='book'/>:<br>
+                                            <label class="control-label" for="bookname"><fmt:message key='allbooks.bookname'/></label>
+                                            <input class="form-control input-sm" type="text" id="bookname" name="bookname">
+                                        </div>
+                                        <button type="submit" class="btn btn-info"><fmt:message key='allbooks.search'/></button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
+    </div>
 
     <!-- /.col-md-4 -->
 </div>
