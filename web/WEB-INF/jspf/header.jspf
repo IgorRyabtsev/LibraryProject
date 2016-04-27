@@ -65,6 +65,20 @@
                     <c:if test="${user_session.role.equals('user')}">
                         <li><a href="/userhistory"><fmt:message key="userhistory"/></a></li>
                     </c:if>
+                    <c:if test="${user_session.role .equals('librarian')}">
+                        <li><a href="/ordershistory"><fmt:message key="order.history"/></a></li>
+                    </c:if>
+                    <c:if test="${user_session.role .equals('librarian')}">
+                        <li><a href="/addlibrarian"><fmt:message key="order.librarian"/></a></li>
+                    </c:if>
+                    <c:if test="${user_session.role .equals('librarian')}">
+                        <li><a href="/addnewbook"><fmt:message key="order.addnewbook"/></a></li>
+                        <li><a href="#"><fmt:message key="order.out"/></a></li>  <%--TODO: сделать завтра!--%>
+                        <li><a href="#"><fmt:message key="order.in"/></a></li>
+                    </c:if>
+
+
+
                     <%--<li><a href="/main.jsp">Something</a></li>--%>
                     <%--<li><a href="/main.jsp">Something</a></li>--%>
 

@@ -125,7 +125,7 @@ public class OracleReaderDao implements ReaderDao {
         try(final Connection connection = OracleDAOFactory.getConnection();
             final Statement statement = connection.createStatement();
             final ResultSet rs = statement.executeQuery(
-                    "SELECT id_r, namer_f, namer_s, namer_p, year, email, password, role FROM Reader")) {
+                    "SELECT id_r, namer_f, namer_s, namer_p, year, email, password, role FROM Reader where role!='librarian'")) {
             while (rs.next()) {
                 readers.add(parseResultSet(rs));
             }
@@ -133,6 +133,17 @@ public class OracleReaderDao implements ReaderDao {
             throw new RuntimeException(e);
         }
         return readers;
+    }
+
+    @Override
+    public boolean makeLibrarian(int id) {
+        try(final Connection connection = OracleDAOFactory.getConnection();
+            final Statement statement = connection.createStatement()){
+            return statement.executeUpdate(
+                    "Update Reader set role='librarian' where id_r=" + id) > 0 ? true : false;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private Reader parseResultSet(ResultSet rs) throws SQLException {
