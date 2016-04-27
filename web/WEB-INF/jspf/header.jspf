@@ -59,10 +59,10 @@
                     <c:if test="${user_session.role != null}">
                         <li><a href="/avaliablebooks"><fmt:message key="avaliablebook"/></a></li>
                     </c:if>
-                    <c:if test="${user_session.role != null}">
+                    <c:if test="${user_session.role .equals('user')}">
                         <li><a href="/userorders"><fmt:message key="userorders"/></a></li>
                     </c:if>
-                    <c:if test="${user_session.role != null}">
+                    <c:if test="${user_session.role.equals('user')}">
                         <li><a href="/userhistory"><fmt:message key="userhistory"/></a></li>
                     </c:if>
                     <%--<li><a href="/main.jsp">Something</a></li>--%>

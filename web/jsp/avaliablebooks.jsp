@@ -24,7 +24,14 @@
                                             ${au.name_f} ${au.name_s} ${au.name_p} <br>
                                         </c:forEach>
                                         </td>
+
+                                        <c:if test="${user_session.role .equals('user')}">
                                         <td><a href="/orderbook?id=${insta.key.id_i}"> ${insta.key.book.name_b} </a></td>
+                                        </c:if>
+                                        <c:if test="${user_session.role .equals('librarian')}">
+                                            <td><a href="/deleteinstance?id=${insta.key.id_i}"> ${insta.key.book.name_b} </a></td>
+                                        </c:if>
+
                                         <td>${insta.key.year_b}</td>
                                         <td>${insta.key.publish}</td>
                                     </tr>
