@@ -24,7 +24,45 @@ import java.util.Map;
 public class ReturnBook extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        if (request.getParameter("id_i") == null || request.getSession().getAttribute("order") == null) {
+//        if (request.getParameter("id_i") == null || request.getSession().getAttribute("order") == null) {
+//            response.sendError(400);
+//            return;
+//        }
+//
+//        int idOrder=0;
+//        int idInstance=0;
+//        try {
+//            idOrder = (Integer) (request.getSession().getAttribute("order"));
+//            idInstance = Integer.valueOf(request.getParameter("id_i"));
+//        } catch (NumberFormatException e) {
+//            request.getSession().setAttribute("order",null);
+//            response.sendError(400);
+//            e.printStackTrace();
+//            return;
+//        }
+//
+//        String date = request.getParameter("date");
+//        java.sql.Date sqlDate;
+//        try {
+//            sqlDate = java.sql.Date.valueOf(date);
+//        } catch (IllegalArgumentException e) {
+//            String message = "wrongdate";
+//            request.setAttribute("message",message);
+//            Map.Entry<Instance, List<Author>> instanceById = Connections.getFactory().getInstanceDao().getInstanceById(idInstance);
+//            request.setAttribute("instAuth",instanceById);
+//            request.getRequestDispatcher("/jsp/librarian/returnbook.jsp").forward(request, response);
+//            return;
+//        }
+//        String comments= request.getParameter("comments");
+//
+//        Connections.getFactory().getOrdersDao().takeBook(idOrder,sqlDate,comments);
+//        request.getSession().setAttribute("order",null);
+//        List<Reader> allReaders = Connections.getFactory().getReaderDao().getAll();
+//        request.setAttribute("allReaders",allReaders);
+//        request.getRequestDispatcher("/jsp/librarian/allReaders.jsp").forward(request, response);
+        System.out.println(request.getParameter("id_i") + "*" + request.getParameter("order"));
+        if (request.getParameter("id_i") == null || request.getParameter("order") == null) {
+            System.out.println("1");
             response.sendError(400);
             return;
         }
@@ -32,10 +70,11 @@ public class ReturnBook extends HttpServlet {
         int idOrder=0;
         int idInstance=0;
         try {
-            idOrder = (Integer) (request.getSession().getAttribute("order"));
+            idOrder = Integer.valueOf(request.getParameter("order"));
             idInstance = Integer.valueOf(request.getParameter("id_i"));
         } catch (NumberFormatException e) {
-            request.getSession().setAttribute("order",null);
+//            request.getSession().setAttribute("order",null);
+            System.out.println("2");
             response.sendError(400);
             e.printStackTrace();
             return;
@@ -48,15 +87,17 @@ public class ReturnBook extends HttpServlet {
         } catch (IllegalArgumentException e) {
             String message = "wrongdate";
             request.setAttribute("message",message);
+
             Map.Entry<Instance, List<Author>> instanceById = Connections.getFactory().getInstanceDao().getInstanceById(idInstance);
             request.setAttribute("instAuth",instanceById);
+            request.setAttribute("order",request.getParameter("order"));
             request.getRequestDispatcher("/jsp/librarian/returnbook.jsp").forward(request, response);
             return;
         }
         String comments= request.getParameter("comments");
 
         Connections.getFactory().getOrdersDao().takeBook(idOrder,sqlDate,comments);
-        request.getSession().setAttribute("order",null);
+//        request.getSession().setAttribute("order",null);
         List<Reader> allReaders = Connections.getFactory().getReaderDao().getAll();
         request.setAttribute("allReaders",allReaders);
         request.getRequestDispatcher("/jsp/librarian/allReaders.jsp").forward(request, response);
@@ -79,9 +120,12 @@ public class ReturnBook extends HttpServlet {
             e.printStackTrace();
             return;
         }
+        System.out.println(request.getParameter("id"));
+        System.out.println(request.getParameter("id_i"));
 
         Map.Entry<Instance, List<Author>> instanceById = Connections.getFactory().getInstanceDao().getInstanceById(idInstance);
-        request.getSession().setAttribute("order",idOrder);
+//        request.getSession().setAttribute("order",idOrder);
+        request.setAttribute("order",request.getParameter("id"));
         request.setAttribute("instAuth",instanceById);
         request.getRequestDispatcher("/jsp/librarian/returnbook.jsp").forward(request, response);
     }

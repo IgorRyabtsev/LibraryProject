@@ -76,7 +76,9 @@ public class AddNewBook extends HttpServlet {
             doGet(request, response);
             return;
         }
-
+//        System.out.println(namef+"*"+names+"*"+namep+"*"+yearBirth);
+//        System.out.println(bookname+"*"+yearBook+"*"+publish+"*"+bookCost);
+        if(namep.isEmpty()) namep=" ";//for insertion
         if (Connections.getFactory().getInstanceDao().insertInstance(new Author(0,namef,names,namep,yearBirth),
                 new Instance(0,new Book(0,bookname),yearBook,publish,bookCost,1,""))) {
             String message = "ok";

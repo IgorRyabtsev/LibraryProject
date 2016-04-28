@@ -34,8 +34,7 @@
             <div class="control-group form-group">
                 <div class="controls">
                     <label><fmt:message key="allbooks.namep"/>:</label>
-                    <input type="text" name="namep" class="form-control" id="namep" required
-                           data-validation-required-message="Please enter name patronic.">
+                    <input type="text" name="namep" class="form-control" id="namep">
 
                     <p class="help-block"></p>
                 </div>
@@ -43,8 +42,7 @@
             <div class="control-group form-group">
                 <div class="controls">
                     <label><fmt:message key="yearb"/>:</label>
-                    <input type="text" name="yearbirth" class="form-control" id="yearbirth" required
-                           data-validation-required-message="Please enter second name.">
+                    <input type="text" name="yearbirth" class="form-control" id="yearbirth" ">
 
                     <p class="help-block"></p>
                 </div>

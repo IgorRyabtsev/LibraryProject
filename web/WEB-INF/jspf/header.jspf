@@ -73,7 +73,7 @@
                     </c:if>
                     <c:if test="${user_session.role .equals('librarian')}">
                         <li><a href="/addnewbook"><fmt:message key="order.addnewbook"/></a></li>
-                        <li><a href="#"><fmt:message key="order.out"/></a></li>  <%--TODO: сделать завтра!--%>
+                        <li><a href="/allreadersForGivebook"><fmt:message key="order.out"/></a></li>  <%--TODO: сделать завтра!--%>
                         <li><a href="/allreaders"><fmt:message key="order.in"/></a></li>
                     </c:if>
 

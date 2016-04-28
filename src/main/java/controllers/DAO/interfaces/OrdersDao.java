@@ -15,6 +15,6 @@ public interface OrdersDao {
     //вернуть книгу в библиотеку
     boolean takeBook(String email, Date date, Instance instance);
     boolean takeBook(int id, Date date, String comments);
-    boolean giveBook(String email, Date date);
+    boolean giveBook(int id_i, int id_r, Date date);
 
 }

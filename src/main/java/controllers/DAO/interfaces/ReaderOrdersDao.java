@@ -16,4 +16,6 @@ public interface ReaderOrdersDao {
     boolean insertOrder(Reader reader, Instance instance);
     List<Map.Entry<Instance, List<Author> >> getInstancesByReader(Reader r);
     boolean deleteOrderByReader(Reader reader, Book book, String publish);
+    List<Instance> getListOfOrdersByEmailForLibrarian(String email);
+    List<Map.Entry<Instance, List<Author>>> getInstancesByReaderForLibrarian(Reader r);
 }

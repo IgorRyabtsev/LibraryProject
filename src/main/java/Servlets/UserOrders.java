@@ -26,7 +26,7 @@ public class UserOrders extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Reader reader = (Reader) request.getSession().getAttribute("user_session");
-        List<Map.Entry<Instance, List<Author>>> instancesByReader = Connections.getFactory().getReaderOrdersDao().getInstancesByReader(reader);
+        List<Map.Entry<Instance, List<Author>>> instancesByReader = Connections.getFactory().getReaderOrdersDao().getInstancesByReaderForLibrarian(reader);
         request.setAttribute("instances",instancesByReader);
         request.getRequestDispatcher("/jsp/userorders.jsp").forward(request, response);
     }
