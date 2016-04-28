@@ -11,7 +11,7 @@
                     <table class="table table-striped table-bordered table-hover" id="dataTables-example2">
                         <thead>
                         <tr>
-                            <th><h3>Info:</h3></th>
+                            <th><h3><fmt:message key='info'/>:</h3></th>
                         </tr>
                         </thead>
                         <tr>

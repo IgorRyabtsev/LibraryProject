@@ -268,6 +268,27 @@ public class OracleInstanceDao implements InstanceDao {
         return instances;
     }
 
+    @Override
+    public  List<Author> getListOfAuthors(Instance instance) {
+        List<Author> authors = new ArrayList<>();
+        try(final Connection connection = OracleDAOFactory.getConnection();
+            final Statement statement = connection.createStatement();
+            final ResultSet rs = statement.executeQuery(
+                    "SELECT id_a, name_f, name_s, name_p, year_a, id_b, name_b  FROM ((Book join AuBook on book_id=id_b) join Author on " +
+                            "id_a=author_id) where id_b=" + instance.getBook().getId_b())) {
+            while (rs.next()) {
+                authors.add(new Author(rs.getInt("id_a"),
+                                rs.getString("name_f"),
+                                rs.getString("name_s"),
+                                rs.getString("name_p"),
+                                rs.getInt("year_a")));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return authors;
+    }
+
     private String parseForAuthors(Author author) {
         StringBuffer expression = new StringBuffer(" where ");
         String tmp;

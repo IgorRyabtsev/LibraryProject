@@ -16,6 +16,7 @@ public interface InstanceDao {
     Map.Entry<Instance,List<Author>> getInstanceById(int id);
     List<Map<Instance, List<Author>>> getInstanceByNameV2(String name, int status);
     List<Map<Instance, List<Author>>> getInstanceByCondition(Author author, Book book);
+    List<Author> getListOfAuthors(Instance instance);
     boolean insertInstance(Author author, Instance r);
     boolean deleteInstanceById(int id);
 }

@@ -104,6 +104,33 @@ public class OracleOrdersDao implements OrdersDao {
     }
     //TODO: вывести список заказов
 
+    @Override
+    public boolean takeBook(int id, Date date, String comments){
+        int exec;
+        try(final Connection connection = OracleDAOFactory.getConnection()){
+            PreparedStatement pstmt = connection.prepareStatement("update Orders set return_date = ? " +
+                    "where id_o=?" );
+            pstmt.setDate(1,date);
+            pstmt.setString(2,String.valueOf(id));
+            exec = pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        if(exec<1) {
+            return false;
+        }
+
+        try(final Connection connection = OracleDAOFactory.getConnection();
+            final Statement statement = connection.createStatement()){
+
+            return statement.executeUpdate(
+                    "update Instance set status = " + 1 + ", comments='" + comments + "' where id_i in (select instance_id from " +
+                            " orders where id_o="+id+")") > 0;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 
 }
