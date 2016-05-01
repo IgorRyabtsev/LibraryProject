@@ -38,7 +38,9 @@ public class OracleReaderOrdersDao implements ReaderOrdersDao {
             throw new RuntimeException(e);
         }
 
-        if (bookCount.isEmpty()) return null;
+        if (bookCount.isEmpty()) {
+            return null;
+        }
 
         for (Map.Entry entry: bookCount.entrySet()) {
             int count = (Integer) entry.getValue();
@@ -76,7 +78,7 @@ public class OracleReaderOrdersDao implements ReaderOrdersDao {
 
             return statement.executeUpdate(
                     "insert into OrdNum (numreader, booko_id, publish_o) " +
-                            "values (" + reader.getId_r() +", " + instance.getBook().getId_b() + ", '" + instance.getPublish() + "')") > 0 ? true : false;
+                            "values (" + reader.getId_r() + ", " + instance.getBook().getId_b() + ", '" + instance.getPublish() + "')") > 0;
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -139,6 +141,7 @@ public class OracleReaderOrdersDao implements ReaderOrdersDao {
         }
         return inst;
     }
+
     @Override
     public List<Map.Entry<Instance, List<Author>>> getInstancesByReaderForLibrarian(Reader r) {
         List<Map.Entry<Instance, List<Author>>> instances = new ArrayList<>();
@@ -149,6 +152,7 @@ public class OracleReaderOrdersDao implements ReaderOrdersDao {
         }
         return instances;
     }
+
     @Override
     public boolean deleteOrderByReader(Reader reader, Book book, String publish){
         try(final Connection connection = OracleDAOFactory.getConnection();
@@ -157,12 +161,11 @@ public class OracleReaderOrdersDao implements ReaderOrdersDao {
             return statement.executeUpdate(
                     "Delete from Ordnum where numreader = " + reader.getId_r() + " " +
                             "and booko_id=" + book.getId_b() + " and publish_o='" + publish +
-                            "' and rownum=1") > 0 ? true : false;
+                            "' and rownum=1") > 0;
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-//        return false;
     }
 
 }

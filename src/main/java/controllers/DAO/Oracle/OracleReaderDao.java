@@ -69,22 +69,7 @@ public class OracleReaderDao implements ReaderDao {
 
             return statement.executeUpdate(
                     "insert into Reader (namer_f, namer_s, namer_p, year, email, password, role) " +
-                            "values (" + parseforInsert(r) + ")") > 0 ? true : false;
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        //когда добавишь logger пиши тут return false
-    }
-
-    @Override
-    public boolean deleteReaderById(int id) {
-
-        try(final Connection connection = OracleDAOFactory.getConnection();
-            final Statement statement = connection.createStatement()){
-
-            return statement.executeUpdate(
-                    "Delete from Reader where id_r = " + id ) > 0 ? true : false;
+                            "values (" + parseforInsert(r) + ")") > 0;
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -101,22 +86,6 @@ public class OracleReaderDao implements ReaderDao {
         tmp.append("'" + r.getPassword()+"'" + ", ");
         tmp.append("'" + r.getRole()+"'");
         return tmp.toString();
-    }
-
-    @Override
-    public boolean findByEmail(String email) {
-        try(final Connection connection = OracleDAOFactory.getConnection();
-            final Statement statement = connection.createStatement();
-            final ResultSet rs = statement.executeQuery(
-                    "SELECT id_r, namer_f, namer_s, namer_p, year, email, password, role FROM Reader where email = '" + email + "'")) {
-            if (rs.next()) {
-                return true;
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        return false;
     }
 
     @Override
@@ -147,17 +116,13 @@ public class OracleReaderDao implements ReaderDao {
     }
 
     private Reader parseResultSet(ResultSet rs) throws SQLException {
-        Reader r = new Reader(rs.getInt("id_r"),
-                            rs.getString("namer_f"),
-                            rs.getString("namer_s"),
-                            rs.getString("namer_p"),
-                            rs.getInt("year"),
-                            rs.getString("email"),
-                            rs.getString("password"),
-                            rs.getString("role"));
-
-        return r;
+        return new Reader(rs.getInt("id_r"),
+                rs.getString("namer_f"),
+                rs.getString("namer_s"),
+                rs.getString("namer_p"),
+                rs.getInt("year"),
+                rs.getString("email"),
+                rs.getString("password"),
+                rs.getString("role"));
     }
-
-
 }

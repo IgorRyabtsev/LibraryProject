@@ -25,11 +25,7 @@ public class OracleDAOFactory implements DAOFactory {
         Locale.setDefault(Locale.ENGLISH);
         try {
             Class.forName(driverName).newInstance();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (InstantiationException | ClassNotFoundException | IllegalAccessException e) {
             e.printStackTrace();
         }
         Connection connection = DriverManager.getConnection(url, username, password);
@@ -37,23 +33,16 @@ public class OracleDAOFactory implements DAOFactory {
     }
 
     @Override
-    public ReaderDao getReaderDao() {
-        return new OracleReaderDao();
-    }
+    public ReaderDao getReaderDao() { return new OracleReaderDao(); }
 
     @Override
     public AuthorDao getAuthorDao() { return new OracleAuthorDao(); }
 
     @Override
-    public AuthorCondition getAuthorConditionDao() {
-        return new OracleAuthorCondition();
-    }
+    public AuthorCondition getAuthorConditionDao() { return new OracleAuthorCondition(); }
 
     @Override
     public BookDao getBookDao() { return new OracleBookDao(); }
-
-    @Override
-    public BookCondition getBookConditionDao() { return new OracleBookCondition(); }
 
     @Override
     public InstanceDao getInstanceDao() { return new OracleInstanceDao(); }
@@ -62,7 +51,6 @@ public class OracleDAOFactory implements DAOFactory {
     public OrdersDao getOrdersDao() { return new OracleOrdersDao(); }
 
     @Override
-    public ReaderOrdersDao getReaderOrdersDao() { return new OracleReaderOrdersDao();}
-
+    public ReaderOrdersDao getReaderOrdersDao() { return new OracleReaderOrdersDao(); }
 
 }

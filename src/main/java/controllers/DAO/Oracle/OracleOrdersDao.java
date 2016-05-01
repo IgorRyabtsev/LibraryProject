@@ -62,50 +62,12 @@ public class OracleOrdersDao implements OrdersDao {
         return orders;
     }
 
-    @Override //TODO: мб тут сделать по email
-    public boolean takeBook(String email, Date date, Instance instance) {
-        int exec;
-//        System.out.println(date);
-        try(final Connection connection = OracleDAOFactory.getConnection();
-            final Statement statement = connection.createStatement()){
-
-            PreparedStatement pstmt = connection.prepareStatement("update Orders set return_date = ? " +
-                    "where (reader_id in (select id_r from Reader where email = ?) and instance_id in \n" +
-                    "(select id_i from Instance where id_book=24 and status=0  and year_b = 2015 \n" +
-                    "and publish = ?))");
-            pstmt.setDate(1,date);
-            pstmt.setString(2,email);
-            pstmt.setString(3,instance.getPublish());
-
-            exec = pstmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        if(exec<1) {
-            return false;
-        }
-        try(final Connection connection = OracleDAOFactory.getConnection();
-            final Statement statement = connection.createStatement()){
-
-            return statement.executeUpdate(
-                    "update Instance set status = " + 1 + " where id_i in " +
-                            "(select id_i from Instance where id_book=" + instance.getBook().getId_b() + " and status=0  " +
-                            "and year_b = " + instance.getYear_b() + " and publish = '" + instance.getPublish() + "' "
-                            + ")") > 0;
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override//TODO: выдача книг хз еще как будет
+    @Override
     public boolean giveBook(int id_r, Date date, Instance instance) {
         int exec;
-//        System.out.println(date);
-        try(final Connection connection = OracleDAOFactory.getConnection();
-            final Statement statement = connection.createStatement()){
+        try(final Connection connection = OracleDAOFactory.getConnection()){
 
-            PreparedStatement pstmt = connection.prepareStatement("Insert into Orders (reader_id, instance_id, release_date," +
+            final PreparedStatement pstmt = connection.prepareStatement("Insert into Orders (reader_id, instance_id, release_date," +
                     " return_date) VALUES (?,?,?,null)");
             pstmt.setInt(1,id_r);
             pstmt.setInt(2,instance.getId_i());
@@ -124,14 +86,14 @@ public class OracleOrdersDao implements OrdersDao {
 
         try(final Connection connection = OracleDAOFactory.getConnection();
             final Statement statement = connection.createStatement()){
-
             b = statement.executeUpdate(
                     "update Instance set status = " + 0 + " where id_i=" + instance.getId_i()) > 0;
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        if(b=false) return false;
+        if(b=false) {
+            return false;
+        }
         try(final Connection connection = OracleDAOFactory.getConnection();
             final Statement statement = connection.createStatement()){
 
@@ -142,7 +104,6 @@ public class OracleOrdersDao implements OrdersDao {
             throw new RuntimeException(e);
         }
     }
-    //TODO: вывести список заказов
 
     @Override
     public boolean takeBook(int id, Date date, String comments){
@@ -171,6 +132,4 @@ public class OracleOrdersDao implements OrdersDao {
             throw new RuntimeException(e);
         }
     }
-
-
 }

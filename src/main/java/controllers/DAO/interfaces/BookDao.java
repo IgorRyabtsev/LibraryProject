@@ -10,8 +10,6 @@ import java.util.List;
  */
 public interface BookDao {
     List<Book> getAll();
-    Book getBookById(int id);
-    boolean deleteBookById(int id);
     boolean insertBook(Book book);
     int findBook(Book book);
 }

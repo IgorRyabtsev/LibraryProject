@@ -20,10 +20,10 @@ import java.util.Map;
 @WebServlet(name = "SearchBook", urlPatterns = "/searchbook")
 public class SearchBook extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String namef = (String) request.getParameter("namef");
-        String names = (String) request.getParameter("names");
-        String namep = (String) request.getParameter("namep");
-        String bookname = (String) request.getParameter("bookname");
+        String namef = request.getParameter("namef");
+        String names = request.getParameter("names");
+        String namep = request.getParameter("namep");
+        String bookname = request.getParameter("bookname");
         Author author = new Author(0,namef,names,namep,0);
         Book book = new Book(0,bookname);
 

@@ -14,7 +14,6 @@ import java.util.List;
 /**
  * Created by igor on 21.04.16.
  */
-//TODO: аналогичная пробелма с удалением!
 
 public class OracleBookDao implements BookDao {
 
@@ -41,35 +40,6 @@ public class OracleBookDao implements BookDao {
     }
 
     @Override
-    public Book getBookById(int id) {
-        try(final Connection connection = OracleDAOFactory.getConnection();
-            final Statement statement = connection.createStatement();
-            final ResultSet rs = statement.executeQuery(
-                    "SELECT id_b, name_b FROM Book where id_b = " + id)) {
-            if (rs.next()) {
-                return new Book(rs.getInt("id_b"),
-                        rs.getString("name_b"));
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return null;
-    }
-
-    @Override
-    public boolean deleteBookById(int id) {
-        try(final Connection connection = OracleDAOFactory.getConnection();
-            final Statement statement = connection.createStatement()){
-
-            return statement.executeUpdate(
-                    "Delete from Book where id_b = " + id ) > 0 ? true : false;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
     public boolean insertBook(Book book) {
         if (book == null) return false;
         try(final Connection connection = OracleDAOFactory.getConnection();
@@ -77,12 +47,11 @@ public class OracleBookDao implements BookDao {
 
             return statement.executeUpdate(
                     "insert into Book (name_b) " +
-                            "values (" + parseforInsert(book) + ")") > 0 ? true : false;
+                            "values (" + parseforInsert(book) + ")") > 0;
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        //TODO: когда добавишь log то тут return надо добавить
     }
 
     private String parseforInsert(Book book) {
@@ -91,20 +60,7 @@ public class OracleBookDao implements BookDao {
         return tmp.toString();
     }
 
-    private boolean findByCondition(BookCondition bookCondition) {
-        try(final Connection connection = OracleDAOFactory.getConnection();
-            final Statement statement = connection.createStatement();
-            final ResultSet rs = statement.executeQuery(
-                    "SELECT id_b, name_b FROM Book where " + bookCondition.getExpression() )) {
-            if (rs.next()) {
-                return true;
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return false;
-    }
-
+    @Override
     public int findBook(Book book) {
         try(final Connection connection = OracleDAOFactory.getConnection();
             final Statement statement = connection.createStatement();

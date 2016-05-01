@@ -12,8 +12,5 @@ public interface ReaderDao {
     Reader getReaderById(int id);
     Reader getReaderByEmail(String email);
     boolean insertReader(Reader r);
-    boolean deleteReaderById(int id);
-    boolean findByEmail(String email);
     boolean makeLibrarian(int id);
-
 }

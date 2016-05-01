@@ -12,7 +12,6 @@ public interface DAOFactory {
     AuthorDao getAuthorDao();
     AuthorCondition getAuthorConditionDao();
     BookDao getBookDao();
-    BookCondition getBookConditionDao();
     InstanceDao getInstanceDao();
     OrdersDao getOrdersDao();
     ReaderOrdersDao getReaderOrdersDao();

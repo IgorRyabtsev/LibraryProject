@@ -12,8 +12,6 @@ import java.util.List;
 public interface OrdersDao {
     List<Orders> getAllOrders();
     List<Orders> getOrdersByEmail(String email);
-    //вернуть книгу в библиотеку
-    boolean takeBook(String email, Date date, Instance instance);
     boolean takeBook(int id, Date date, String comments);
     boolean giveBook(int id_r, Date date, Instance instance);
 
