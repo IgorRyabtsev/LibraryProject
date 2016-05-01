@@ -29,7 +29,9 @@ public class SearchBook extends HttpServlet {
 
         List<Map<Instance, List<Author>>> allInstances = Connections.getFactory().getInstanceDao().getInstanceByCondition(author,book);
         request.setAttribute("instances",allInstances);
-        request.getRequestDispatcher("/jsp/avaliablebooks.jsp").forward(request, response);
+    ////    request.getRequestDispatcher("/jsp/avaliablebooks.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/jsp/avaliablebooks.jsp").forward(request, response);
+//        response.sendRedirect("/avaliablebooks");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

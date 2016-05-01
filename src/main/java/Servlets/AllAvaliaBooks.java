@@ -26,6 +26,7 @@ public class AllAvaliaBooks extends HttpServlet {
 
         List<Map<Instance, List<Author>>> allInstances = Connections.getFactory().getInstanceDao().getInstanceByNameV2(null,1);
         request.setAttribute("instances",allInstances);
-        request.getRequestDispatcher("/jsp/avaliablebooks.jsp").forward(request, response);
+//        request.getRequestDispatcher("/jsp/avaliablebooks.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/jsp/avaliablebooks.jsp").forward(request, response);
     }
 }

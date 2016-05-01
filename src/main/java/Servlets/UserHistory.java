@@ -26,6 +26,7 @@ public class UserHistory extends HttpServlet {
         List<Orders> ordersByEmail = Connections.getFactory().getOrdersDao().getOrdersByEmail(reader.getEmail());
 
         request.setAttribute("history",ordersByEmail);
-        request.getRequestDispatcher("/jsp/userhistory.jsp").forward(request, response);
+//        request.getRequestDispatcher("/jsp/userhistory.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/jsp/userhistory.jsp").forward(request, response);
     }
 }

@@ -33,9 +33,11 @@ public class DeleteInstance extends HttpServlet {
         }
 
         Connections.getFactory().getInstanceDao().deleteInstanceById(instanceId);
-        List<Map<Instance, List<Author>>> allInstances = Connections.getFactory().getInstanceDao().getInstanceByNameV2(null,1);
-        request.setAttribute("instances",allInstances);
-        request.getRequestDispatcher("/jsp/avaliablebooks.jsp").forward(request, response);
+//        List<Map<Instance, List<Author>>> allInstances = Connections.getFactory().getInstanceDao().getInstanceByNameV2(null,1);
+//        request.setAttribute("instances",allInstances);
+////        request.getRequestDispatcher("/jsp/avaliablebooks.jsp").forward(request, response);
+//        request.getRequestDispatcher("/WEB-INF/jsp/avaliablebooks.jsp").forward(request, response);
+        response.sendRedirect("/avaliablebooks");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -53,6 +55,7 @@ public class DeleteInstance extends HttpServlet {
         }
         Map.Entry<Instance,List<Author>> instanceAuthorList = Connections.getFactory().getInstanceDao().getInstanceById(instanceId);
         request.setAttribute("instAuth", instanceAuthorList);
-        request.getRequestDispatcher("/jsp/librarian/deleteinstance.jsp").forward(request, response);
+//        request.getRequestDispatcher("/jsp/librarian/deleteinstance.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/jsp/librarian/deleteinstance.jsp").forward(request, response);
     }
 }

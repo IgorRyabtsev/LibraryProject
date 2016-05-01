@@ -20,9 +20,11 @@ public class SearchByEmailForGiveBook extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String email = request.getParameter("email");
         if(email.isEmpty() || email.trim().isEmpty()) {
-            List<Reader> allReaders = Connections.getFactory().getReaderDao().getAll();
-            request.setAttribute("allReaders",allReaders);
-            request.getRequestDispatcher("/jsp/librarian/allreadersForGivebook.jsp").forward(request, response);
+//            List<Reader> allReaders = Connections.getFactory().getReaderDao().getAll();
+//            request.setAttribute("allReaders",allReaders);
+////            request.getRequestDispatcher("/jsp/librarian/allreadersForGivebook.jsp").forward(request, response);
+//            request.getRequestDispatcher("/WEB-INF/jsp/librarian/allreadersForGivebook.jsp").forward(request, response);
+            response.sendRedirect("/allreadersForGivebook");
             return;
         }
         List<Reader> allReaders = new ArrayList<>();
@@ -31,7 +33,9 @@ public class SearchByEmailForGiveBook extends HttpServlet {
             allReaders.add(readerByEmail);
         }
         request.setAttribute("allReaders",allReaders);
-        request.getRequestDispatcher("/jsp/librarian/allreadersForGivebook.jsp").forward(request, response);
+//        request.getRequestDispatcher("/jsp/librarian/allreadersForGivebook.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/jsp/librarian/allreadersForGivebook.jsp").forward(request, response);
+        response.sendRedirect("/allreadersForGivebook");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

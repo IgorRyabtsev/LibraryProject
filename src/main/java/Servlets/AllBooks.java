@@ -25,7 +25,7 @@ public class AllBooks extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Map<Instance, List<Author>>> allInstances = Connections.getFactory().getInstanceDao().getAll();
         request.setAttribute("instances",allInstances);
-
-        request.getRequestDispatcher("/jsp/all_books.jsp").forward(request, response);
+//        request.getRequestDispatcher("/jsp/all_books.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/jsp/all_books.jsp").forward(request, response);
     }
 }

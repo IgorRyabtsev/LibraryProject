@@ -60,8 +60,10 @@ public class DeleteUserOrders extends HttpServlet {
             response.sendError(400);
             return;
         }
-        request.setAttribute("instances",instancesByReader);
-        request.getRequestDispatcher("/jsp/userorders.jsp").forward(request, response);
+//        request.setAttribute("instances",instancesByReader);
+////        request.getRequestDispatcher("/jsp/userorders.jsp").forward(request, response);
+//        request.getRequestDispatcher("/WEB-INF/jsp/userorders.jsp").forward(request, response);
+      response.sendRedirect("/userorders");
 
     }
 
@@ -89,6 +91,7 @@ public class DeleteUserOrders extends HttpServlet {
 
         Map.Entry<Instance,List<Author>> instanceAuthorList = Connections.getFactory().getInstanceDao().getInstanceById(instanceId);
         request.setAttribute("instAuth", instanceAuthorList);
-        request.getRequestDispatcher("/jsp/deleteuserorders.jsp").forward(request, response);
+//        request.getRequestDispatcher("/jsp/deleteuserorders.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/jsp/deleteuserorders.jsp").forward(request, response);
     }
 }

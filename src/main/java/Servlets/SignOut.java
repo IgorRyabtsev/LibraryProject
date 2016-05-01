@@ -23,6 +23,9 @@ public class SignOut extends HttpServlet {
         if (session!= null){
             session.invalidate();
         }
-        response.sendRedirect("/jsp/main.jsp");
+//        response.sendRedirect("/jsp/main.jsp");
+//        response.sendRedirect("/WEB-INF/jsp/main.jsp");
+//        response.sendRedirect("/jsp/main.jsp");
+        request.getRequestDispatcher("/jsp/main.jsp").forward(request, response);
     }
 }

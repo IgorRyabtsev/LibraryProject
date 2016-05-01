@@ -91,7 +91,8 @@ public class ReturnBook extends HttpServlet {
             Map.Entry<Instance, List<Author>> instanceById = Connections.getFactory().getInstanceDao().getInstanceById(idInstance);
             request.setAttribute("instAuth",instanceById);
             request.setAttribute("order",request.getParameter("order"));
-            request.getRequestDispatcher("/jsp/librarian/returnbook.jsp").forward(request, response);
+//            request.getRequestDispatcher("/jsp/librarian/returnbook.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/jsp/librarian/returnbook.jsp").forward(request, response);
             return;
         }
         String comments= request.getParameter("comments");
@@ -99,8 +100,10 @@ public class ReturnBook extends HttpServlet {
         Connections.getFactory().getOrdersDao().takeBook(idOrder,sqlDate,comments);
 //        request.getSession().setAttribute("order",null);
         List<Reader> allReaders = Connections.getFactory().getReaderDao().getAll();
-        request.setAttribute("allReaders",allReaders);
-        request.getRequestDispatcher("/jsp/librarian/allReaders.jsp").forward(request, response);
+//        request.setAttribute("allReaders",allReaders);
+//        request.getRequestDispatcher("/jsp/librarian/allReaders.jsp").forward(request, response);
+//        request.getRequestDispatcher("/WEB-INF/jsp/librarian/allReaders.jsp").forward(request, response);
+        response.sendRedirect("/allreaders");
 
     }
 
@@ -127,6 +130,7 @@ public class ReturnBook extends HttpServlet {
 //        request.getSession().setAttribute("order",idOrder);
         request.setAttribute("order",request.getParameter("id"));
         request.setAttribute("instAuth",instanceById);
-        request.getRequestDispatcher("/jsp/librarian/returnbook.jsp").forward(request, response);
+//        request.getRequestDispatcher("/jsp/librarian/returnbook.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/jsp/librarian/returnbook.jsp").forward(request, response);
     }
 }

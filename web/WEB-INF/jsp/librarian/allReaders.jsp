@@ -21,7 +21,7 @@
                             <tbody>
                             <c:forEach items="${allReaders}" var="reader">
                                 <tr>
-                                    <td> <a href="/addlibrarianform?id=${reader.id_r}"> ${reader.namer_f} ${reader.namer_s} ${reader.namer_p} </a></td>
+                                    <td> <a href="/readerhistory?id=${reader.id_r}"> ${reader.namer_f} ${reader.namer_s} ${reader.namer_p} </a></td>
                                     <td> ${reader.year}</td>
                                     <td> ${reader.email}</td>
                                 </tr>
@@ -52,9 +52,8 @@
                         <tr>
                             <td>
                                 <div >
-                                    <form name="searchReaders" id="contactForm" action="/searchbyemailAddLibrarian" method="post">
+                                    <form name="searchReaders" id="contactForm" action="/searchbyemail" method="post">
                                         <div class="form-group">
-                                            <fmt:message key='email'/>:<br>
                                             <label class="control-label" for="email" id=""><fmt:message key='email'/></label>
                                             <input class="form-control input-sm" type="text" id="email" name="email">
                                         </div>
@@ -70,7 +69,6 @@
             </div>
         </div>
     </div>
-
     <!-- /.col-md-4 -->
 </div>
 <!-- /.row -->

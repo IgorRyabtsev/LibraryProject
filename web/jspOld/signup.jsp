@@ -1,4 +1,11 @@
-    <div class="row">
+<jsp:useBean id="messageSignUp" scope="request"
+             class="java.lang.String"/>
+
+<c:if test="${!messageSignUp.equals('')}">
+    <h1><fmt:message key="${messageSignUp}"/></h1>
+</c:if>
+
+<div class="row">
         <div class="col-lg-12">
             <h1 class="page-header"><fmt:message key="registration"/></h1>
         </div>

@@ -50,6 +50,7 @@ public class ReaderHistory extends HttpServlet {
 
 
         request.setAttribute("history",history);
-        request.getRequestDispatcher("/jsp/librarian/readerhistory.jsp").forward(request, response);
+//        request.getRequestDispatcher("/jsp/librarian/readerhistory.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/jsp/librarian/readerhistory.jsp").forward(request, response);
     }
 }

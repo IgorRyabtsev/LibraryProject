@@ -1,5 +1,11 @@
-<div class="container">
+<jsp:useBean id="messageSignIn" scope="request"
+             class="java.lang.String"/>
 
+<c:if test="${!messageSignIn.equals('')}">
+    <h1><fmt:message key="${messageSignIn}"/></h1>
+</c:if>
+<br><br>
+<div class="container">
     <form class="form-signin" action="/login" method="post">
         <h2 class="form-signin-heading"><fmt:message key="lohin.login_please"/></h2>
         <label for="inputEmail" class="sr-only"><fmt:message key="lohin.email"/></label>
@@ -9,5 +15,4 @@
 
         <button class="btn btn-lg btn-block btn-info" size="25" type="submit"><fmt:message key="lohin.login"/></button>
     </form>
-
 </div> <!-- /container -->

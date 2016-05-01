@@ -92,7 +92,8 @@ public class AddNewBook extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("/jsp/librarian/addnewbook.jsp").forward(request, response);
+//        request.getRequestDispatcher("/jsp/librarian/addnewbook.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/jsp/librarian/addnewbook.jsp").forward(request, response);
     }
 
     private static int getCurrentYear() {

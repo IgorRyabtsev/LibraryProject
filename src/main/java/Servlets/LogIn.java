@@ -21,31 +21,31 @@ public class LogIn extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         if (email.trim().isEmpty() || password.trim().isEmpty()) {
+            request.setAttribute("messageSignIn","empty");
             doGet(request, response);
-            System.out.println("some empty boxes");
             return;
         }
 
         Reader readerByEmail = Connections.getFactory().getReaderDao().getReaderByEmail(email);
         if(readerByEmail == null) {
+            request.setAttribute("messageSignIn","nosuchuser");
             doGet(request, response);
-            System.out.println("not existed email");
             return;
         }
-
-//        System.out.println(readerByEmail);
 
         if(readerByEmail.getPassword().equals(EncodingPassword.hash(password))) {
             HttpSession session = request.getSession();
             session.setAttribute("user_session",readerByEmail);
-            request.getRequestDispatcher("/jsp/main.jsp").forward(request, response);
+//            request.getRequestDispatcher("/jsp/main.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/jsp/main.jsp").forward(request, response);
             return;
         }
-        request.getRequestDispatcher("/jsp/login.jsp").forward(request, response);
-        System.out.println("not correct password");
+        request.setAttribute("messageSignIn","notcorrectpassword");
+        doGet(request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("/jsp/login.jsp").forward(request, response);
+//        request.getRequestDispatcher("/jsp/login.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
     }
 }

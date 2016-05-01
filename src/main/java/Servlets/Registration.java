@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by igor on 25.04.16.
@@ -17,6 +19,8 @@ import java.io.IOException;
 @WebServlet(name = "registration", urlPatterns = "/signup")
 public class Registration extends HttpServlet {
 
+    Pattern p = Pattern.compile("[0-9a-z_]+@[0-9a-z_^\\.]+\\.[a-z]{2,3}");
+    Matcher m;
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String namef = request.getParameter("namef");
         String names = request.getParameter("names");
@@ -29,9 +33,13 @@ public class Registration extends HttpServlet {
         //some empty values
         if(namef.trim().isEmpty() || names.trim().isEmpty() || namep.trim().isEmpty() ||
                 email.trim().isEmpty() || password.trim().isEmpty() || year.trim().isEmpty()) {
+            request.setAttribute("messageSignUp","empty");
             doGet(request, response);
-            System.out.println("empty");
             return;
+//            doGet(request, response);
+
+//            System.out.println("empty");
+//            return;
         }
 
         //wrong year format
@@ -39,25 +47,33 @@ public class Registration extends HttpServlet {
         try {
             yearOfBirth = new Integer(year);
         }catch (NumberFormatException e) {
+            request.setAttribute("messageSignUp","wrongyear");
             doGet(request, response);
-            System.out.println("year format");
             return;
         }
 
         //year out of range
         if( yearOfBirth > getCurrentYear() || yearOfBirth < getCurrentYear()-150){
+            request.setAttribute("messageSignUp","wrongyear");
             doGet(request, response);
-            System.out.println("year");
             return;
         }
+
+        Matcher m = p.matcher(email);
+        if( !m.matches() ){
+            request.setAttribute("messageSignUp","wrongEmail");
+            doGet(request, response);
+            return;
+        }
+
+
 
         //such emil is already exist
         Reader reader = Connections.getFactory().getReaderDao().getReaderByEmail(email);
         if(reader != null) {
+            request.setAttribute("messageSignUp","emailExists");
             doGet(request, response);
-            System.out.println("email is already exist");
             return;
-
         }
 
         Reader newReader = new Reader(0,namef,names,namep,yearOfBirth,email,EncodingPassword.hash(password),"user");
@@ -65,11 +81,15 @@ public class Registration extends HttpServlet {
             response.sendError(400);
             return;
         }
-        response.sendRedirect("/jsp/login.jsp");
+//        response.sendRedirect("/jsp/login.jsp");
+//        response.sendRedirect("/WEB-INF/jsp/login.jsp");
+//        request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
+        response.sendRedirect("/login");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("/jsp/signup.jsp").forward(request, response);
+//        request.getRequestDispatcher("/jsp/signup.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/jsp/signup.jsp").forward(request, response);
     }
 
     private static int getCurrentYear() {

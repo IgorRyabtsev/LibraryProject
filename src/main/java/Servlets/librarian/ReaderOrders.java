@@ -42,6 +42,7 @@ public class ReaderOrders extends HttpServlet {
         System.out.println(instancesByReader);
         request.setAttribute("instances",instancesByReader);
         request.setAttribute("readers",readerById);
-        request.getRequestDispatcher("/jsp/librarian/userorders.jsp").forward(request, response);
+//        request.getRequestDispatcher("/jsp/librarian/userorders.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/jsp/librarian/userorders.jsp").forward(request, response);
     }
 }

@@ -34,9 +34,11 @@ public class AddLibrarianForm extends HttpServlet {
             return;
         }
         Connections.getFactory().getReaderDao().makeLibrarian(idReader);
-        List<Reader> allReaders = Connections.getFactory().getReaderDao().getAll();
-        request.setAttribute("allReaders",allReaders);
-        request.getRequestDispatcher("/jsp/librarian/listofreadersLibrarian.jsp").forward(request, response);
+//        List<Reader> allReaders = Connections.getFactory().getReaderDao().getAll();
+//        request.setAttribute("allReaders",allReaders);
+//        request.getRequestDispatcher("/jsp/librarian/listofreadersLibrarian.jsp").forward(request, response);
+//        request.getRequestDispatcher("/WEB-INF/jsp/librarian/listofreadersLibrarian.jsp").forward(request, response);
+        response.sendRedirect("/addlibrarian");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -56,6 +58,7 @@ public class AddLibrarianForm extends HttpServlet {
 
         Reader reader = Connections.getFactory().getReaderDao().getReaderById(idReader);
         request.setAttribute("reader", reader);
-        request.getRequestDispatcher("/jsp/librarian/addlibrarianForm.jsp").forward(request, response);
+//        request.getRequestDispatcher("/jsp/librarian/addlibrarianForm.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/jsp/librarian/addlibrarianForm.jsp").forward(request, response);
     }
 }

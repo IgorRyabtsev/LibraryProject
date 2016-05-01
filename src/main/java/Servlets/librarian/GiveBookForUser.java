@@ -45,17 +45,20 @@ public class GiveBookForUser extends HttpServlet {
             Map.Entry<Instance,List<Author>> instanceAuthorList = Connections.getFactory().getInstanceDao().getInstanceById(instanceId);
             request.setAttribute("instAuth", instanceAuthorList);
             request.setAttribute("readerForGive", reader);
-            request.getRequestDispatcher("/jsp/librarian/giveBookRoReader.jsp").forward(request, response);
+//            request.getRequestDispatcher("/jsp/librarian/giveBookRoReader.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/jsp/librarian/giveBookRoReader.jsp").forward(request, response);
             return;
         }
-
+        Map.Entry<Instance, List<Author>> instance = Connections.getFactory().getInstanceDao().getInstanceById(instanceId);
         Reader reader = Connections.getFactory().getReaderDao().getReaderById(readerId);
 
-        Connections.getFactory().getOrdersDao().giveBook(instanceId,readerId,sqlDate);
+        Connections.getFactory().getOrdersDao().giveBook(readerId,sqlDate,instance.getKey());
 
-        List<Reader> allReaders = Connections.getFactory().getReaderDao().getAll();
-        request.setAttribute("allReaders",allReaders);
-        request.getRequestDispatcher("/jsp/librarian/allreadersForGivebook.jsp").forward(request, response);//troubles
+//        List<Reader> allReaders = Connections.getFactory().getReaderDao().getAll();
+//        request.setAttribute("allReaders",allReaders);
+////        request.getRequestDispatcher("/jsp/librarian/allreadersForGivebook.jsp").forward(request, response);//troubles
+//        request.getRequestDispatcher("/WEB-INF/jsp/librarian/allreadersForGivebook.jsp").forward(request, response);//troubles
+        response.sendRedirect("/allreadersForGivebook");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -77,6 +80,7 @@ public class GiveBookForUser extends HttpServlet {
         Map.Entry<Instance,List<Author>> instanceAuthorList = Connections.getFactory().getInstanceDao().getInstanceById(instanceId);
         request.setAttribute("instAuth", instanceAuthorList);
         request.setAttribute("readerForGive", reader);
-        request.getRequestDispatcher("/jsp/librarian/giveBookRoReader.jsp").forward(request, response);
+//        request.getRequestDispatcher("/jsp/librarian/giveBookRoReader.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/jsp/librarian/giveBookRoReader.jsp").forward(request, response);
     }
 }

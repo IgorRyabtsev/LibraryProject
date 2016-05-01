@@ -23,6 +23,7 @@ public class AllReadersGiveBook extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Reader> allReaders = Connections.getFactory().getReaderDao().getAll();
         request.setAttribute("allReaders",allReaders);
-        request.getRequestDispatcher("/jsp/librarian/allreadersForGivebook.jsp").forward(request, response);
+//        request.getRequestDispatcher("/jsp/librarian/allreadersForGivebook.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/jsp/librarian/allreadersForGivebook.jsp").forward(request, response);
     }
 }
