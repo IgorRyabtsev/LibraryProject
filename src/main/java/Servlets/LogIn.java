@@ -36,7 +36,6 @@ public class LogIn extends HttpServlet {
         if(readerByEmail.getPassword().equals(EncodingPassword.hash(password))) {
             HttpSession session = request.getSession();
             session.setAttribute("user_session",readerByEmail);
-//            request.getRequestDispatcher("/jsp/main.jsp").forward(request, response);
             request.getRequestDispatcher("/WEB-INF/jsp/main.jsp").forward(request, response);
             return;
         }
@@ -45,7 +44,6 @@ public class LogIn extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        request.getRequestDispatcher("/jsp/login.jsp").forward(request, response);
         request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
     }
 }

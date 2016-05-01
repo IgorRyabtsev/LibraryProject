@@ -28,7 +28,6 @@ public class UserOrders extends HttpServlet {
         Reader reader = (Reader) request.getSession().getAttribute("user_session");
         List<Map.Entry<Instance, List<Author>>> instancesByReader = Connections.getFactory().getReaderOrdersDao().getInstancesByReaderForLibrarian(reader);
         request.setAttribute("instances",instancesByReader);
-//        request.getRequestDispatcher("/jsp/userorders.jsp").forward(request, response);
         request.getRequestDispatcher("/WEB-INF/jsp/userorders.jsp").forward(request, response);
     }
 }

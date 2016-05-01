@@ -24,9 +24,7 @@ public class UserHistory extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Reader reader = (Reader) request.getSession().getAttribute("user_session");
         List<Orders> ordersByEmail = Connections.getFactory().getOrdersDao().getOrdersByEmail(reader.getEmail());
-
         request.setAttribute("history",ordersByEmail);
-//        request.getRequestDispatcher("/jsp/userhistory.jsp").forward(request, response);
         request.getRequestDispatcher("/WEB-INF/jsp/userhistory.jsp").forward(request, response);
     }
 }

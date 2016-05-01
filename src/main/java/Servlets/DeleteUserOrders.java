@@ -21,12 +21,10 @@ import java.util.Map;
 public class DeleteUserOrders extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (request.getParameter("id") == null) {
-            System.out.println("1");
             response.sendError(400);
             return;
         }
         if (request.getParameter("publish") == null) {
-            System.out.println("2");
             response.sendError(400);
             return;
         }
@@ -36,7 +34,6 @@ public class DeleteUserOrders extends HttpServlet {
         try {
             instanceId = Integer.valueOf(request.getParameter("id"));
         } catch (NumberFormatException e) {
-            System.out.println("3");
             response.sendError(400);
             e.printStackTrace();
             return;
@@ -46,25 +43,14 @@ public class DeleteUserOrders extends HttpServlet {
         Map.Entry<Instance, List<Author>> instanceById = Connections.getFactory().getInstanceDao().getInstanceById(instanceId);
         Reader reader = (Reader) request.getSession().getAttribute("user_session");
 
-        if(Connections.getFactory().getReaderOrdersDao().deleteOrderByReader(reader,instanceById.getKey().getBook(),publish)) {
-            System.out.println("4");
-//            response.sendError(400);
-//            return;
-        }
-        System.out.println(instanceById.getKey());
-        System.out.println(instanceById.getValue());
-        System.out.println("50");
+        Connections.getFactory().getReaderOrdersDao().deleteOrderByReader(reader,instanceById.getKey().getBook(),publish);
 
         List<Map.Entry<Instance, List<Author>>> instancesByReader = Connections.getFactory().getReaderOrdersDao().getInstancesByReader(reader);
         if(instancesByReader == null) {
             response.sendError(400);
             return;
         }
-//        request.setAttribute("instances",instancesByReader);
-////        request.getRequestDispatcher("/jsp/userorders.jsp").forward(request, response);
-//        request.getRequestDispatcher("/WEB-INF/jsp/userorders.jsp").forward(request, response);
-      response.sendRedirect("/userorders");
-
+        response.sendRedirect("/userorders");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -91,7 +77,6 @@ public class DeleteUserOrders extends HttpServlet {
 
         Map.Entry<Instance,List<Author>> instanceAuthorList = Connections.getFactory().getInstanceDao().getInstanceById(instanceId);
         request.setAttribute("instAuth", instanceAuthorList);
-//        request.getRequestDispatcher("/jsp/deleteuserorders.jsp").forward(request, response);
         request.getRequestDispatcher("/WEB-INF/jsp/deleteuserorders.jsp").forward(request, response);
     }
 }

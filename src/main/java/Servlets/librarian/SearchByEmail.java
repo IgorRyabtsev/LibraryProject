@@ -24,10 +24,6 @@ public class SearchByEmail extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String email = request.getParameter("email");
         if(email.isEmpty() || email.trim().isEmpty()) {
-//            List<Reader> allReaders = Connections.getFactory().getReaderDao().getAll();
-//            request.setAttribute("allReaders",allReaders);
-//            request.getRequestDispatcher("/jsp/librarian/allReaders.jsp").forward(request, response);
-//            request.getRequestDispatcher("/WEB-INF/jsp/librarian/allReaders.jsp").forward(request, response);
             response.sendRedirect("/allreaders");
             return;
         }
@@ -37,12 +33,10 @@ public class SearchByEmail extends HttpServlet {
             allReaders.add(readerByEmail);
         }
         request.setAttribute("allReaders",allReaders);
-//        request.getRequestDispatcher("/jsp/librarian/allReaders.jsp").forward(request, response);
         request.getRequestDispatcher("/WEB-INF/jsp/librarian/allReaders.jsp").forward(request, response);
         response.sendRedirect("/allreaders");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
     }
 }

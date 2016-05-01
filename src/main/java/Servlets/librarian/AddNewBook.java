@@ -26,8 +26,6 @@ public class AddNewBook extends HttpServlet {
         String bookname = request.getParameter("bookname");
         String publish = request.getParameter("publish");
         String cost = request.getParameter("cost");
-
-
         //some empty values
         if(namef.trim().isEmpty() || names.trim().isEmpty()  ||
                 bookname.trim().isEmpty() || publish.trim().isEmpty() || year.trim().isEmpty() ||
@@ -37,7 +35,6 @@ public class AddNewBook extends HttpServlet {
             doGet(request, response);
             return;
         }
-
         Integer yearBirth=0;
         if(!yearbirth.isEmpty()) {
             try {
@@ -76,8 +73,6 @@ public class AddNewBook extends HttpServlet {
             doGet(request, response);
             return;
         }
-//        System.out.println(namef+"*"+names+"*"+namep+"*"+yearBirth);
-//        System.out.println(bookname+"*"+yearBook+"*"+publish+"*"+bookCost);
         if(namep.isEmpty()) namep=" ";//for insertion
         if (Connections.getFactory().getInstanceDao().insertInstance(new Author(0,namef,names,namep,yearBirth),
                 new Instance(0,new Book(0,bookname),yearBook,publish,bookCost,1,""))) {
@@ -92,7 +87,6 @@ public class AddNewBook extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        request.getRequestDispatcher("/jsp/librarian/addnewbook.jsp").forward(request, response);
         request.getRequestDispatcher("/WEB-INF/jsp/librarian/addnewbook.jsp").forward(request, response);
     }
 

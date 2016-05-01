@@ -14,7 +14,6 @@ import java.io.IOException;
 @WebServlet(name = "Locale", urlPatterns = "/change_locale")
 public class Locale extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

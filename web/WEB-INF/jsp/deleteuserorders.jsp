@@ -1,6 +1,10 @@
 <jsp:useBean id="instAuth" scope="request"
              type="java.util.Map.Entry<main.java.controllers.model.Instance, java.util.List<main.java.controllers.model.Author>>"/>
 
+<c:if test="${user_session.role==null || user_session.role.equals('librarian')}">
+    <c:redirect url="/jsp/main.jsp"></c:redirect>
+</c:if>
+
 <h1><fmt:message key="orders.delete"/>:</h1>
 <div class="row">
     <div class="col-md-6">

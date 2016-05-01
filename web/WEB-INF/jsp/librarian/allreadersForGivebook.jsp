@@ -1,6 +1,9 @@
 <jsp:useBean id="allReaders" scope="request"
              type="java.util.List<main.java.controllers.model.Reader>"/>
 
+<c:if test="${user_session.role==null || user_session.role.equals('user')}">
+    <c:redirect url="/jsp/main.jsp"></c:redirect>
+</c:if>
 
 <h2><fmt:message key='readers'/></h2>
 <div class="row">

@@ -1,6 +1,10 @@
 <jsp:useBean id="reader" scope="request"
              type="main.java.controllers.model.Reader"/>
 
+<c:if test="${user_session.role==null || user_session.role.equals('user')}">
+    <c:redirect url="/jsp/main.jsp"></c:redirect>
+</c:if>
+
 <br>
 <h1><fmt:message key='librarianstatus'/>:</h1>
 <div class="row">

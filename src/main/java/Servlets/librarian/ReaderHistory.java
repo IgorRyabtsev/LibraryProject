@@ -47,10 +47,7 @@ public class ReaderHistory extends HttpServlet {
             Map.Entry<Orders,List<Author>> instance= new AbstractMap.SimpleEntry<>(orders,Connections.getFactory().getInstanceDao().getListOfAuthors(orders.getInstance()));
             history.add(instance);
         }
-
-
         request.setAttribute("history",history);
-//        request.getRequestDispatcher("/jsp/librarian/readerhistory.jsp").forward(request, response);
         request.getRequestDispatcher("/WEB-INF/jsp/librarian/readerhistory.jsp").forward(request, response);
     }
 }

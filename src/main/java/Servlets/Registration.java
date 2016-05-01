@@ -29,17 +29,12 @@ public class Registration extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-
         //some empty values
         if(namef.trim().isEmpty() || names.trim().isEmpty() || namep.trim().isEmpty() ||
                 email.trim().isEmpty() || password.trim().isEmpty() || year.trim().isEmpty()) {
             request.setAttribute("messageSignUp","empty");
             doGet(request, response);
             return;
-//            doGet(request, response);
-
-//            System.out.println("empty");
-//            return;
         }
 
         //wrong year format
@@ -65,10 +60,7 @@ public class Registration extends HttpServlet {
             doGet(request, response);
             return;
         }
-
-
-
-        //such emil is already exist
+        //such email is already exist
         Reader reader = Connections.getFactory().getReaderDao().getReaderByEmail(email);
         if(reader != null) {
             request.setAttribute("messageSignUp","emailExists");
@@ -81,14 +73,10 @@ public class Registration extends HttpServlet {
             response.sendError(400);
             return;
         }
-//        response.sendRedirect("/jsp/login.jsp");
-//        response.sendRedirect("/WEB-INF/jsp/login.jsp");
-//        request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
         response.sendRedirect("/login");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        request.getRequestDispatcher("/jsp/signup.jsp").forward(request, response);
         request.getRequestDispatcher("/WEB-INF/jsp/signup.jsp").forward(request, response);
     }
 

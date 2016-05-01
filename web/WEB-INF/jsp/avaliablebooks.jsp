@@ -1,6 +1,10 @@
 <jsp:useBean id="instances" scope="request" type="java.util.List<java.util.Map<main.java.controllers.model.Instance, java.util.List<main.java.controllers.model.Author>> >"/>
 <br><h1><fmt:message key='List_of_books'/></h1><br>
 
+<c:if test="${user_session.role==null}">
+    <c:redirect url="/jsp/main.jsp"></c:redirect>
+</c:if>
+
 <div class="row">
     <div class="col-md-8">
         <div class="row">

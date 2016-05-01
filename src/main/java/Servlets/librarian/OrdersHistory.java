@@ -23,7 +23,6 @@ public class OrdersHistory extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Orders> ordersByEmail = Connections.getFactory().getOrdersDao().getAllOrders();
         request.setAttribute("history",ordersByEmail);
-//        request.getRequestDispatcher("/jsp/librarian/ordershistory.jsp").forward(request, response);
         request.getRequestDispatcher("/WEB-INF/jsp/librarian/ordershistory.jsp").forward(request, response);
     }
 }
