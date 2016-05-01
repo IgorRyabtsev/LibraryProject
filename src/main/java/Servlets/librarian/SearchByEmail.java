@@ -5,6 +5,7 @@ import main.java.controllers.model.Author;
 import main.java.controllers.model.Book;
 import main.java.controllers.model.Instance;
 import main.java.controllers.model.Reader;
+import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,9 +22,13 @@ import java.util.Map;
  */
 @WebServlet(name = "SearchByEmail", urlPatterns = "/searchbyemail")
 public class SearchByEmail extends HttpServlet {
+
+    private final Logger logger = Logger.getLogger(SearchByEmail.class);
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String email = request.getParameter("email");
         if(email.isEmpty() || email.trim().isEmpty()) {
+            logger.debug("Some empty fields");
             response.sendRedirect("/allreaders");
             return;
         }

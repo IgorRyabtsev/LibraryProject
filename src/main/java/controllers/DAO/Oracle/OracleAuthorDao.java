@@ -4,6 +4,7 @@ import main.java.controllers.DAO.Connections;
 import main.java.controllers.DAO.condition.AuthorCondition;
 import main.java.controllers.DAO.interfaces.AuthorDao;
 import main.java.controllers.model.Author;
+import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -17,9 +18,13 @@ import java.util.List;
  */
 
 public class OracleAuthorDao implements AuthorDao {
+
+    private static final Logger logger = Logger.getLogger(OracleAuthorDao.class);
+
     @Override
     public List<Author> getAll() {
         List<Author> auths = new ArrayList<>();
+        logger.debug("getAll method: SELECT id_a, name_f, name_s, name_p, year_a FROM Author");
         try(final Connection connection = OracleDAOFactory.getConnection();
             final Statement statement = connection.createStatement();
             final ResultSet rs = statement.executeQuery(
@@ -28,7 +33,7 @@ public class OracleAuthorDao implements AuthorDao {
                 auths.add(parseResultSet(rs));
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.error("SQLException getAll", e);
         }
         return auths;
     }
@@ -44,7 +49,9 @@ public class OracleAuthorDao implements AuthorDao {
 
     @Override
     public boolean insertAuthor(Author au) {
-        if (au == null) return false;
+        if (au == null) {
+            return false;
+        }
         AuthorCondition authorCondition = Connections.getFactory().getAuthorConditionDao();
         authorCondition.setName_f(au.getName_f());
         authorCondition.setName_s(au.getName_s());
@@ -53,6 +60,7 @@ public class OracleAuthorDao implements AuthorDao {
         if(findByCondition(authorCondition)) {
             return false;
         }
+        logger.debug("Insertion of new Author");
         try(final Connection connection = OracleDAOFactory.getConnection();
             final Statement statement = connection.createStatement()){
 
@@ -61,8 +69,9 @@ public class OracleAuthorDao implements AuthorDao {
                             "values (" + parseforInsert(au) + ")") > 0;
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.error("SQLException insertAuthor", e);
         }
+        return false;
     }
 
     private String parseforInsert(Author au) {
@@ -75,6 +84,7 @@ public class OracleAuthorDao implements AuthorDao {
     }
 
     private boolean findByCondition(AuthorCondition authorCondition) {
+        logger.debug("findByCondition");
         try(final Connection connection = OracleDAOFactory.getConnection();
             final Statement statement = connection.createStatement();
             final ResultSet rs = statement.executeQuery(
@@ -83,13 +93,14 @@ public class OracleAuthorDao implements AuthorDao {
                 return true;
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.error("SQLException findByCondition", e);
         }
         return false;
     }
 
     @Override
     public int findAuthor(Author author) {
+        logger.debug("findAuthor");
         try(final Connection connection = OracleDAOFactory.getConnection();
             final Statement statement = connection.createStatement();
             final ResultSet rs = statement.executeQuery(
@@ -99,7 +110,7 @@ public class OracleAuthorDao implements AuthorDao {
                 return rs.getInt("id_a");
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.error("SQLException findAuthor", e);
         }
         return -1;
     }

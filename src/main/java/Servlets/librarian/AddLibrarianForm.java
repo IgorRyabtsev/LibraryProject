@@ -4,6 +4,7 @@ import main.java.controllers.DAO.Connections;
 import main.java.controllers.model.Author;
 import main.java.controllers.model.Instance;
 import main.java.controllers.model.Reader;
+import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,8 +20,12 @@ import java.util.Map;
  */
 @WebServlet(name = "AddLibrarianForm", urlPatterns = "/addlibrarianform")
 public class AddLibrarianForm extends HttpServlet {
+
+    private final Logger logger = Logger.getLogger(AddLibrarianForm.class);
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (request.getParameter("id") == null) {
+            logger.error("Parameter id is null!");
             response.sendError(400);
             return;
         }
@@ -29,6 +34,7 @@ public class AddLibrarianForm extends HttpServlet {
         try {
             idReader = Integer.valueOf(request.getParameter("id"));
         } catch (NumberFormatException e) {
+            logger.error("Troubles with parameter id!");
             response.sendError(400);
             e.printStackTrace();
             return;
@@ -39,6 +45,7 @@ public class AddLibrarianForm extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (request.getParameter("id") == null) {
+            logger.error("Parameter id is null!");
             response.sendError(400);
             return;
         }
@@ -47,6 +54,7 @@ public class AddLibrarianForm extends HttpServlet {
         try {
             idReader = Integer.valueOf(request.getParameter("id"));
         } catch (NumberFormatException e) {
+            logger.error("Troubles with parameter id!");
             response.sendError(400);
             e.printStackTrace();
             return;

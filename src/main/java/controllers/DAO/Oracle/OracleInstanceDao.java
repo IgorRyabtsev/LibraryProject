@@ -6,6 +6,7 @@ import main.java.controllers.model.AuthBook;
 import main.java.controllers.model.Author;
 import main.java.controllers.model.Book;
 import main.java.controllers.model.Instance;
+import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -18,10 +19,12 @@ import java.util.*;
  */
 public class OracleInstanceDao implements InstanceDao {
 
+    private static final Logger logger = Logger.getLogger(OracleInstanceDao.class);
     @Override
     public Map.Entry<Instance,List<Author>> getInstanceById(int id) {
         Instance instance = new Instance();
         List<Author> authors = new ArrayList<>();
+        logger.debug("getInstaceById get instance by id.");
         try(final Connection connection = OracleDAOFactory.getConnection();
             final Statement statement = connection.createStatement();
             final ResultSet rs = statement.executeQuery(
@@ -37,13 +40,13 @@ public class OracleInstanceDao implements InstanceDao {
                                 rs.getString("comments"));
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.error("SQLException getInstaceById", e);
         }
 
         if(instance.getPublish()==null) {
             return null;
         }
-
+        logger.debug("getInstaceById get authors.");
         try(final Connection connection = OracleDAOFactory.getConnection();
             final Statement statement = connection.createStatement();
             final ResultSet rs = statement.executeQuery(
@@ -58,10 +61,11 @@ public class OracleInstanceDao implements InstanceDao {
                         rs.getInt("year_a")));
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.error("SQLException getInstaceById get authors", e);
         }
 
         if(authors.isEmpty()) {
+            logger.error("No authors");
             return null;
         }
         Map.Entry<Instance,List<Author>> instAuth = new AbstractMap.SimpleEntry<>(instance, authors);
@@ -84,6 +88,7 @@ public class OracleInstanceDao implements InstanceDao {
         List<Map<Instance, List<Author>>> instances = new ArrayList<>();
 
         List<Instance> inst = new ArrayList<>();
+        logger.debug("getInstanceByName get list of instances");
         try(final Connection connection = OracleDAOFactory.getConnection();
             final Statement statement = connection.createStatement();
             final ResultSet rs = statement.executeQuery(
@@ -99,7 +104,7 @@ public class OracleInstanceDao implements InstanceDao {
                         rs.getString("comments")));
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.error("SQLException getInstacesByName", e);
         }
         //if no instances
         if(inst.isEmpty()) {
@@ -107,6 +112,7 @@ public class OracleInstanceDao implements InstanceDao {
         }
 
         List<AuthBook> authbooks=new ArrayList<>();
+        logger.debug("getInstanceByName get list Authors-Books");
         try(final Connection connection = OracleDAOFactory.getConnection();
             final Statement statement = connection.createStatement();
             final ResultSet rs = statement.executeQuery(
@@ -123,7 +129,7 @@ public class OracleInstanceDao implements InstanceDao {
                                         rs.getString("name_b"))));
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.error("SQLException getInstanceByName get list of Author-Books",e);
         }
 
         if(authbooks.isEmpty()) {
@@ -155,6 +161,7 @@ public class OracleInstanceDao implements InstanceDao {
         List<Map<Instance, List<Author>>> instances = new ArrayList<>();
 
         List<Instance> inst = new ArrayList<>();
+        logger.debug("getInstanceByCondition get list of instances");
         try(final Connection connection = OracleDAOFactory.getConnection();
             final Statement statement = connection.createStatement();
             final ResultSet rs = statement.executeQuery(
@@ -173,10 +180,12 @@ public class OracleInstanceDao implements InstanceDao {
                         rs.getString("comments")));
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.error("SQLException getInstacesByCondition", e);;
         }
         //if no instances
-        if(inst.isEmpty()) return new ArrayList<>();;
+        if(inst.isEmpty()) {
+            return new ArrayList<>();
+        };
 
         List<AuthBook> authbooks=new ArrayList<>();
         try(final Connection connection = OracleDAOFactory.getConnection();
@@ -195,7 +204,7 @@ public class OracleInstanceDao implements InstanceDao {
                                         rs.getString("name_b"))));
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.error("SQLException getInstacesByCondition", e);
         }
 
         if(authbooks.isEmpty()) {
@@ -221,6 +230,7 @@ public class OracleInstanceDao implements InstanceDao {
     @Override
     public  List<Author> getListOfAuthors(Instance instance) {
         List<Author> authors = new ArrayList<>();
+        logger.debug("getListOfAuthors");
         try(final Connection connection = OracleDAOFactory.getConnection();
             final Statement statement = connection.createStatement();
             final ResultSet rs = statement.executeQuery(
@@ -235,7 +245,7 @@ public class OracleInstanceDao implements InstanceDao {
                                 rs.getInt("year_a")));
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.error("SQLException getListOfAuthors", e);
         }
         return authors;
     }
@@ -258,18 +268,23 @@ public class OracleInstanceDao implements InstanceDao {
 
     @Override
     public boolean insertInstance(Author author, Instance instance) {
+        logger.debug("insertion instance");
         Connections.getFactory().getAuthorDao().insertAuthor(author);
         int id_a = Connections.getFactory().getAuthorDao().findAuthor(author);
         if (id_a == -1) {
+            logger.error("Couldn't insert new Author");
             return false;
         }
         //insert book
+        logger.debug("insertion book");
         Connections.getFactory().getBookDao().insertBook(instance.getBook());
         int id_b = Connections.getFactory().getBookDao().findBook(instance.getBook());
         if (id_b == -1) {
+            logger.error("Couldn't insert new Book");
             return false;
         }
 
+        logger.debug("Insert Author-Book communication");
         try(final Connection connection = OracleDAOFactory.getConnection();
             final Statement statement = connection.createStatement()){
 
@@ -278,9 +293,11 @@ public class OracleInstanceDao implements InstanceDao {
                             "values (" + id_a + "," + id_b + ")" );
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.error("SQLException insertInstance", e);
+            return false;
         }
 
+        logger.debug("Insert Instance");
         try(final Connection connection = OracleDAOFactory.getConnection();
             final Statement statement = connection.createStatement()){
 
@@ -291,18 +308,21 @@ public class OracleInstanceDao implements InstanceDao {
                             instance.getStatus() + ", '" + instance.getComments()+"')" ) >0;
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.debug("SQLExcetion in insertion Instance",e);
+            return false;
         }
     }
 
     @Override
     public boolean deleteInstanceById(int id) {
+        logger.debug("Delete instance");
         try(final Connection connection = OracleDAOFactory.getConnection();
             final Statement statement = connection.createStatement()){
             return statement.executeUpdate(
                     "Delete from Instance where id_i = " + id ) > 0;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.error("SQLException deleteInstanceById", e);
+            return false;
         }
     }
 

@@ -4,6 +4,7 @@ import main.java.controllers.DAO.Connections;
 import main.java.controllers.model.Author;
 import main.java.controllers.model.Instance;
 import main.java.controllers.model.Reader;
+import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,9 +20,11 @@ import java.util.Map;
  */
 @WebServlet(name = "OrderBook",urlPatterns = "/orderbook")
 public class OrderBook extends HttpServlet {
+    private final Logger logger = Logger.getLogger(OrderBook.class);
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         if (request.getParameter("id") == null) {
+            logger.error("id is null!");
             response.sendError(400);
             return;
         }
@@ -30,6 +33,7 @@ public class OrderBook extends HttpServlet {
         try {
             instanceId = Integer.valueOf(request.getParameter("id"));
         } catch (NumberFormatException e) {
+            logger.error("Trouble with id!");
             response.sendError(400);
             e.printStackTrace();
             return;
@@ -39,11 +43,13 @@ public class OrderBook extends HttpServlet {
         Map.Entry<Instance,List<Author>> instance =  Connections.getFactory().getInstanceDao().getInstanceById(instanceId);
 
         if (instance == null) {
+            logger.error("Troubles with Instances, no Instances with such id, that in parameter");
             response.sendError(400);
             return;
         }
 
         if (!Connections.getFactory().getReaderOrdersDao().insertOrder(reader,instance.getKey())) {
+            logger.error("Troubles with insertion new order");
             response.sendError(400);
             return;
         }
@@ -52,6 +58,7 @@ public class OrderBook extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (request.getParameter("id") == null) {
+            logger.error("id is null!");
             response.sendError(400);
             return;
         }
@@ -59,6 +66,7 @@ public class OrderBook extends HttpServlet {
         try {
             instanceId = Integer.valueOf(request.getParameter("id"));
         } catch (NumberFormatException e) {
+            logger.error("Trouble with id!");
             response.sendError(400);
             e.printStackTrace();
             return;

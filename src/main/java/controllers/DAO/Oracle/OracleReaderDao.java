@@ -2,6 +2,7 @@ package main.java.controllers.DAO.Oracle;
 
 import main.java.controllers.DAO.interfaces.ReaderDao;
 import main.java.controllers.model.Reader;
+import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -15,8 +16,10 @@ import java.util.List;
  */
 public class OracleReaderDao implements ReaderDao {
 
+    private static final Logger logger = Logger.getLogger(OracleReaderDao.class);
     @Override
     public Reader getReaderByEmail(String email) {
+        logger.debug("getReaderByEmail");
         try(final Connection connection = OracleDAOFactory.getConnection();
             final Statement statement = connection.createStatement();
             final ResultSet rs = statement.executeQuery(
@@ -33,13 +36,14 @@ public class OracleReaderDao implements ReaderDao {
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.error("SQLException in getting Reader by email",e);
         }
         return null;
     }
 
     @Override
     public Reader getReaderById(int id) {
+        logger.debug("getReaderById");
         try(final Connection connection = OracleDAOFactory.getConnection();
             final Statement statement = connection.createStatement();
             final ResultSet rs = statement.executeQuery(
@@ -56,14 +60,17 @@ public class OracleReaderDao implements ReaderDao {
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.error("SQLException in getting Reader by id",e);
         }
         return null;
     }
 
     @Override
     public boolean insertReader(Reader r) {
-        if (r == null) return false;
+        if (r == null) {
+            return false;
+        }
+        logger.debug("Insert new reader");
         try(final Connection connection = OracleDAOFactory.getConnection();
             final Statement statement = connection.createStatement()){
 
@@ -72,7 +79,8 @@ public class OracleReaderDao implements ReaderDao {
                             "values (" + parseforInsert(r) + ")") > 0;
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.error("SQLException in insertion new Reader",e);
+            return false;
         }
     }
 
@@ -91,6 +99,7 @@ public class OracleReaderDao implements ReaderDao {
     @Override
     public List<Reader> getAll() {
         List<Reader> readers = new ArrayList<>();
+        logger.debug("getAll");
         try(final Connection connection = OracleDAOFactory.getConnection();
             final Statement statement = connection.createStatement();
             final ResultSet rs = statement.executeQuery(
@@ -99,19 +108,21 @@ public class OracleReaderDao implements ReaderDao {
                 readers.add(parseResultSet(rs));
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.error("SQLException in getAll",e);
         }
         return readers;
     }
 
     @Override
     public boolean makeLibrarian(int id) {
+        logger.debug("Updating role");
         try(final Connection connection = OracleDAOFactory.getConnection();
             final Statement statement = connection.createStatement()){
             return statement.executeUpdate(
-                    "Update Reader set role='librarian' where id_r=" + id) > 0 ? true : false;
+                    "Update Reader set role='librarian' where id_r=" + id) > 0;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.error("SQLException in makeLibrarian",e);
+            return false;
         }
     }
 

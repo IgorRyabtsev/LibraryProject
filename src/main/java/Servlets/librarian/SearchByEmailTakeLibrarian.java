@@ -2,6 +2,7 @@ package main.java.Servlets.librarian;
 
 import main.java.controllers.DAO.Connections;
 import main.java.controllers.model.Reader;
+import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,9 +18,13 @@ import java.util.List;
  */
 @WebServlet(name = "SearchByEmailTakeLibrarian",urlPatterns = "/searchbyemailAddLibrarian")
 public class SearchByEmailTakeLibrarian extends HttpServlet {
+
+    private final Logger logger = Logger.getLogger(SearchByEmailTakeLibrarian.class);
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String email = request.getParameter("email");
         if(email.isEmpty() || email.trim().isEmpty()) {
+            logger.debug("Some empty fields");
             response.sendRedirect("/addlibrarian");
             return;
         }

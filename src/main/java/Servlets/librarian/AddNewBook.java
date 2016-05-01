@@ -4,6 +4,7 @@ import main.java.controllers.DAO.Connections;
 import main.java.controllers.model.Author;
 import main.java.controllers.model.Book;
 import main.java.controllers.model.Instance;
+import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,6 +18,9 @@ import java.io.IOException;
  */
 @WebServlet(name = "AddNewBook", urlPatterns = "/addnewbook")
 public class AddNewBook extends HttpServlet {
+
+    private final Logger logger = Logger.getLogger(AddNewBook.class);
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String namef = request.getParameter("namef");
         String names = request.getParameter("names");
@@ -30,6 +34,7 @@ public class AddNewBook extends HttpServlet {
         if(namef.trim().isEmpty() || names.trim().isEmpty()  ||
                 bookname.trim().isEmpty() || publish.trim().isEmpty() || year.trim().isEmpty() ||
                 cost.trim().isEmpty()) {
+            logger.debug("Some empty fields.");
             String message="enterAllValues";
             request.setAttribute("message",message);
             doGet(request, response);
@@ -40,14 +45,14 @@ public class AddNewBook extends HttpServlet {
             try {
                 yearBirth = new Integer(yearbirth);
             } catch (NumberFormatException e) {
-                String message="enterRightYearofBirth";
-                request.setAttribute("message", message);
+                logger.debug("Not correct year of birth format.");
+                request.setAttribute("message", "enterRightYearofBirth");
                 doGet(request, response);
                 return;
             }
             if( yearBirth > getCurrentYear() || yearBirth < getCurrentYear()-1000){
-                String message = "enterRightYearofBirth";
-                request.setAttribute("message", message);
+                logger.debug("Not correct year of birth.");
+                request.setAttribute("message", "enterRightYearofBirth");
                 doGet(request, response);
                 return;
             }
@@ -57,9 +62,8 @@ public class AddNewBook extends HttpServlet {
         try {
             yearBook = new Integer(year);
         }catch (NumberFormatException e) {
-            String message="enterRightBookYear";
-            request.setAttribute("message",message);
-
+            logger.debug("Not correct year of birth format.");
+            request.setAttribute("message","enterRightBookYear");
             doGet(request, response);
             return;
         }
@@ -68,22 +72,21 @@ public class AddNewBook extends HttpServlet {
         try {
             bookCost = new Integer(cost);
         }catch (NumberFormatException e) {
-            String message="enterRightCost";
-            request.setAttribute("message",message);
+            logger.debug("Not correct cost format.");
+            request.setAttribute("message","enterRightCost");
             doGet(request, response);
             return;
         }
         if(namep.isEmpty()) namep=" ";//for insertion
         if (Connections.getFactory().getInstanceDao().insertInstance(new Author(0,namef,names,namep,yearBirth),
                 new Instance(0,new Book(0,bookname),yearBook,publish,bookCost,1,""))) {
-            String message = "ok";
-            request.setAttribute("message", message);
+            logger.debug("Correct insertion");
+            request.setAttribute("message", "ok");
             doGet(request, response);
             return;
         }
-        String message = "wrong";
-        request.setAttribute("message", message);
-        doGet(request, response);
+        logger.error("Not correct insertion!");
+        response.sendError(400);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
