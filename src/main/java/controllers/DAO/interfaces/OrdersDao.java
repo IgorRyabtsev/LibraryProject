@@ -15,5 +15,7 @@ public interface OrdersDao {
     boolean takeBook(int id, Date date, String comments);
     boolean giveBook(int id_r, Date date, Instance instance);
     Date getReleaseDateById(int id);
-
+    Orders getOrderById(int id);
+    boolean deleteById(int id);
+    boolean setDate(int id, Date rel_date, Date ret_date);
 }

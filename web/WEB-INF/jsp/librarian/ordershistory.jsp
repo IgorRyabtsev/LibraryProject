@@ -27,14 +27,18 @@
                             </thead>
                             <tbody>
                             <c:forEach items="${history}" var="hist">
-                                <tr>
-                                    <td> ${hist.reader.namer_f} ${hist.reader.namer_s} ${hist.reader.namer_p}</td>
-                                    <td> ${hist.instance.book.name_b}</td>
-                                    <td> ${hist.instance.year_b}</td>
-                                    <td> ${hist.instance.publish}</td>
-                                    <td> ${hist.release_date}</td>
-                                    <td> ${hist.return_date}</td>
-                                </tr>
+
+                                    <tr>
+                                        <td> ${hist.reader.namer_f} ${hist.reader.namer_s} ${hist.reader.namer_p}</td>
+                                        <td>
+                                            <a href="/editOrderFromHistory?id=${hist.id_o}"> ${hist.instance.book.name_b} </a>
+                                        </td>
+                                        <td> ${hist.instance.year_b}</td>
+                                        <td> ${hist.instance.publish}</td>
+                                        <td> ${hist.release_date}</td>
+                                        <td> ${hist.return_date}</td>
+                                    </tr>
+
                             </c:forEach>
                             </tbody>
                         </table>
@@ -54,28 +58,21 @@
                     <table class="table table-striped table-bordered table-hover" id="dataTables-example2">
                         <thead>
                         <tr>
-                            <th><h3><fmt:message key='allbook.info.header'/></h3></th>
+                            <th><fmt:message key='allbooks.search'/></th>
+
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
                             <td>
                                 <div >
-                                    <c:if test="${user_session.role == null}">
-                                        <h4> <fmt:message key='allbook.info'/></h4>
-                                    </c:if>
-                                    <p>	<br>
-                                        <fmt:message key='allbook.adress'/><br>
-                                    </p>
-                                    <p>	<br>
-                                        <fmt:message key='allbook.street'/><br>
-                                    </p>
-                                    <p>	<br>
-                                        <fmt:message key='allbook.number'/><br>
-                                    </p>
-                                    <p>	<br>
-                                        <fmt:message key='allbook.email'/><br>
-                                    </p>
+                                    <form name="searchReaders" id="contactForm" action="/searchbyemailForHistory" method="post">
+                                        <div class="form-group">
+                                            <label class="control-label" for="email" id=""><fmt:message key='email'/></label>
+                                            <input class="form-control input-sm" type="text" id="email" name="email">
+                                        </div>
+                                        <button type="submit" class="btn btn-info"><fmt:message key='allbooks.search'/></button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>
@@ -86,7 +83,7 @@
             </div>
         </div>
     </div>
-
     <!-- /.col-md-4 -->
+
 </div>
 <!-- /.row -->

@@ -161,5 +161,74 @@ public class OracleOrdersDao implements OrdersDao {
         }
     }
 
+    @Override
+    public Orders getOrderById(int id) {
+        logger.debug("Get order id");
+        try(final Connection connection = OracleDAOFactory.getConnection();
+            final Statement statement = connection.createStatement();
+            final ResultSet rs = statement.executeQuery(
+                    "select id_r, namer_f, namer_s, namer_p, year, email, password, role," +
+                            " id_i, id_book, name_b, year_b, publish, cost, status, comments," +
+                            " id_o, release_date, return_date from (((Orders join Instance on id_i=instance_id)" +
+                            " join Reader on reader_id=id_r) join Book on id_b=id_book) where id_o="+id)) {
+            while (rs.next()) {
+                return new Orders(rs.getInt("id_o"),
+                        new Reader(rs.getInt("id_r"),
+                                rs.getString("namer_f"),
+                                rs.getString("namer_s"),
+                                rs.getString("namer_p"),
+                                rs.getInt("year"),
+                                rs.getString("email"),
+                                rs.getString("password"),
+                                rs.getString("role")),
+                        new Instance(rs.getInt("id_i"),
+                                new Book(rs.getInt("id_book"),
+                                        rs.getString("name_b")),
+                                rs.getInt("year_b"),
+                                rs.getString("publish"),
+                                rs.getInt("cost"),
+                                rs.getInt("status"),
+                                rs.getString("comments")),
+                        rs.getDate("release_date"),
+                        rs.getDate("return_date"));
+
+            }
+        } catch (SQLException e) {
+            logger.error("SQLException getOrderById",e);
+            return null;
+        }
+        return null;
+    }
+
+    @Override
+    public boolean deleteById(int id) {
+        logger.debug("delete order");
+        try(final Connection connection = OracleDAOFactory.getConnection();
+            final Statement statement = connection.createStatement()){
+
+            return statement.executeUpdate(
+                    "delete from Orders where id_o=" + id) > 0;
+
+        } catch (SQLException e) {
+            logger.error("SQLException in delete order from OrdNum",e);
+            return false;
+        }
+    }
+
+    @Override
+    public boolean setDate(int id, Date rel_date, Date ret_date){
+        logger.debug("update Orders");
+        try(final Connection connection = OracleDAOFactory.getConnection()){
+            PreparedStatement pstmt = connection.prepareStatement("update Orders set release_date=?, return_date = ? " +
+                    "where id_o=?" );
+            pstmt.setDate(1,rel_date);
+            pstmt.setDate(2,ret_date);
+            pstmt.setInt(3,id);
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            logger.error("SQLException in updating Orders");
+            return false;
+        }
+    }
 
 }
