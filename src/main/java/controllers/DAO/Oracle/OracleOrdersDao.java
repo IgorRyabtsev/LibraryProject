@@ -114,6 +114,23 @@ public class OracleOrdersDao implements OrdersDao {
     }
 
     @Override
+    public Date getReleaseDateById(int id) {
+        logger.debug("Get date by id");
+        try(final Connection connection = OracleDAOFactory.getConnection();
+            final Statement statement = connection.createStatement();
+            final ResultSet rs = statement.executeQuery(
+                    "select release_date from orders where id_o="+id)) {
+            while (rs.next()) {
+                return rs.getDate("release_date");
+            }
+        } catch (SQLException e) {
+            logger.error("SQLException getReleaseDateById",e);
+            return null;
+        }
+        return null;
+    }
+
+    @Override
     public boolean takeBook(int id, Date date, String comments){
         int exec;
         logger.debug("update Orders");
@@ -143,4 +160,6 @@ public class OracleOrdersDao implements OrdersDao {
             return false;
         }
     }
+
+
 }

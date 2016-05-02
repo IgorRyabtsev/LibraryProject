@@ -14,5 +14,6 @@ public interface OrdersDao {
     List<Orders> getOrdersByEmail(String email);
     boolean takeBook(int id, Date date, String comments);
     boolean giveBook(int id_r, Date date, Instance instance);
+    Date getReleaseDateById(int id);
 
 }

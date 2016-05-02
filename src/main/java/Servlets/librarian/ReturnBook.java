@@ -58,6 +58,19 @@ public class ReturnBook extends HttpServlet {
             request.getRequestDispatcher("/WEB-INF/jsp/librarian/returnbook.jsp").forward(request, response);
             return;
         }
+        Date releaseDateById = Connections.getFactory().getOrdersDao().getReleaseDateById(idOrder);
+
+        if (releaseDateById.getTime() > sqlDate.getTime()) {
+            logger.debug("Not correct date.");
+            String message = "releasedatebigger";
+            request.setAttribute("message",message);
+            Map.Entry<Instance, List<Author>> instanceById = Connections.getFactory().getInstanceDao().getInstanceById(idInstance);
+            request.setAttribute("instAuth",instanceById);
+            request.setAttribute("order",request.getParameter("order"));
+            request.getRequestDispatcher("/WEB-INF/jsp/librarian/returnbook.jsp").forward(request, response);
+            return;
+        }
+
         String comments= request.getParameter("comments");
         Connections.getFactory().getOrdersDao().takeBook(idOrder,sqlDate,comments);
         response.sendRedirect("/allreaders");
