@@ -19,15 +19,19 @@ public class OracleOrdersDao implements OrdersDao {
     private static final Logger logger = Logger.getLogger(OracleOrdersDao.class);
     @Override
     public List<Orders> getAllOrders() {
-        return getOrdersByEmail(null);
+        return getOrdersByEmail(null,false);
     }
 
     @Override
-    public List<Orders> getOrdersByEmail(String email) {
+    public List<Orders> getOrdersByEmail(String email, boolean isRetDateNull) {
         List<Orders> orders = new ArrayList<>();
-        String additional = "where email = '"+email+"'";
+        String additional = "and email = '"+email+"'";
         if(email==null) {
             additional = "";
+        }
+        String nullableRetDate=" and return_date is null ";
+        if(!isRetDateNull) {
+            nullableRetDate = "";
         }
         logger.debug("Get list of orders");
         try(final Connection connection = OracleDAOFactory.getConnection();
@@ -36,8 +40,8 @@ public class OracleOrdersDao implements OrdersDao {
                     "SELECT id_r, namer_f, namer_s, namer_p, year, email, password, role," +
                             "id_i, id_book, name_b, year_b, publish, cost, status, comments," +
                             "id_o, release_date, return_date FROM ((Orders join Instance on id_i=instance_id) " +
-                            "join Reader on reader_id=id_r) join Book on id_b=id_book "
-                            + additional)) {
+                            "join Reader on reader_id=id_r) join Book on id_b=id_book where 1=1 "
+                            + additional + nullableRetDate)) {
             while (rs.next()) {
                 orders.add(new Orders(rs.getInt("id_o"),
                         new Reader(rs.getInt("id_r"),

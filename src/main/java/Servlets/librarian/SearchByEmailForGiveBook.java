@@ -35,7 +35,6 @@ public class SearchByEmailForGiveBook extends HttpServlet {
         }
         request.setAttribute("allReaders",allReaders);
         request.getRequestDispatcher("/WEB-INF/jsp/librarian/allreadersForGivebook.jsp").forward(request, response);
-        response.sendRedirect("/allreadersForGivebook");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

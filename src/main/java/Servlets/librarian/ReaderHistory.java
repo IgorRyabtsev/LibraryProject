@@ -47,7 +47,7 @@ public class ReaderHistory extends HttpServlet {
             return;
         }
         Reader reader = Connections.getFactory().getReaderDao().getReaderById(idReader);
-        List<Orders> ordersByEmail = Connections.getFactory().getOrdersDao().getOrdersByEmail(reader.getEmail());
+        List<Orders> ordersByEmail = Connections.getFactory().getOrdersDao().getOrdersByEmail(reader.getEmail(),false);
         List<Map.Entry<Orders,List<Author>> > history = new ArrayList<>();
         for (Orders orders:ordersByEmail) {
             Map.Entry<Orders,List<Author>> instance= new AbstractMap.SimpleEntry<>(orders,Connections.getFactory().getInstanceDao().getListOfAuthors(orders.getInstance()));

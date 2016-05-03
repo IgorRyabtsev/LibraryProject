@@ -1,7 +1,6 @@
-package main.java.Servlets;
+package main.java.Servlets.librarian;
 
 import main.java.controllers.DAO.Connections;
-import main.java.controllers.model.Orders;
 import main.java.controllers.model.Reader;
 
 import javax.servlet.ServletException;
@@ -13,18 +12,17 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Created by igor on 26.04.16.
+ * Created by igor on 03.05.16.
  */
-@WebServlet(name = "UserHistory", urlPatterns = "/userhistory")
-public class UserHistory extends HttpServlet {
+@WebServlet(name = "DeleteReader", urlPatterns = "/deleteReader")
+public class DeleteReader extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Reader reader = (Reader) request.getSession().getAttribute("user_session");
-        List<Orders> ordersByEmail = Connections.getFactory().getOrdersDao().getOrdersByEmail(reader.getEmail(),false);
-        request.setAttribute("history",ordersByEmail);
-        request.getRequestDispatcher("/WEB-INF/jsp/userhistory.jsp").forward(request, response);
+        List<Reader> allReaders = Connections.getFactory().getReaderDao().getAll();
+        request.setAttribute("allReaders",allReaders);
+        request.getRequestDispatcher("/WEB-INF/jsp/librarian/deleteReaderList.jsp").forward(request, response);
     }
 }

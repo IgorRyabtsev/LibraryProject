@@ -59,9 +59,19 @@
                     <c:if test="${user_session.role .equals('librarian')}">
                         <li><a href="/ordershistory"><fmt:message key="order.history"/></a></li>
                     </c:if>
+
                     <c:if test="${user_session.role .equals('librarian')}">
-                        <li><a href="/addlibrarian"><fmt:message key="order.librarian"/></a></li>
+                        <li><a href="/deleteReader"><fmt:message key="deleteUser"/></a></li>
                     </c:if>
+
+                    <%--ADD LIBRARIAN!--%>
+                    <%--<c:if test="${user_session.role .equals('librarian')}">--%>
+                        <%--<li><a href="/addlibrarian"><fmt:message key="order.librarian"/></a></li>--%>
+                    <%--</c:if>--%>
+
+
+
+
                     <c:if test="${user_session.role .equals('librarian')}">
                         <li><a href="/addnewbook"><fmt:message key="order.addnewbook"/></a></li>
                         <li><a href="/allreadersForGivebook"><fmt:message key="order.out"/></a></li>  <%--TODO: сделать завтра!--%>
