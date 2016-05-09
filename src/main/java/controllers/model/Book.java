@@ -3,8 +3,15 @@ package main.java.controllers.model;
 /**
  * Created by igor on 21.04.16.
  */
+
+/**
+ * Class Book
+ * @author igor
+ */
+
 public class Book {
     private final int id_b;
+    //book name
     private String name_b;
 
     public Book(int id_b, String name_b) {

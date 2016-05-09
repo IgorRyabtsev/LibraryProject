@@ -17,10 +17,19 @@ import java.util.List;
  * Created by igor on 21.04.16.
  */
 
+/**
+ * Class for working with DB table Author
+ * @author igor
+ */
+
 public class OracleAuthorDao implements AuthorDao {
 
     private static final Logger logger = Logger.getLogger(OracleAuthorDao.class);
 
+    /**
+     * Get list of {@link Author}
+     * @return list of authors
+     */
     @Override
     public List<Author> getAll() {
         List<Author> auths = new ArrayList<>();
@@ -38,6 +47,12 @@ public class OracleAuthorDao implements AuthorDao {
         return auths;
     }
 
+    /**
+     * Parse ResultSet to take Author
+     * @param rs ResultSet
+     * @return author
+     * @throws SQLException
+     */
     private Author parseResultSet(ResultSet rs) throws SQLException{
         Author r = new Author(rs.getInt("id_a"),
                 rs.getString("name_f"),
@@ -47,6 +62,11 @@ public class OracleAuthorDao implements AuthorDao {
         return r;
     }
 
+    /**
+     * Insert new author
+     * @param au auhtor
+     * @return true if everything is ok, else false
+     */
     @Override
     public boolean insertAuthor(Author au) {
         if (au == null) {
@@ -74,6 +94,11 @@ public class OracleAuthorDao implements AuthorDao {
         return false;
     }
 
+    /**
+     * Parse Author for inserting into Author
+     * @param au author
+     * @return part of sql expression for insertion
+     */
     private String parseforInsert(Author au) {
         StringBuffer tmp = new StringBuffer();
         tmp.append("'" + au.getName_f()+"'" + ", ");
@@ -83,6 +108,11 @@ public class OracleAuthorDao implements AuthorDao {
         return tmp.toString();
     }
 
+    /**
+     * Find Author by condition
+     * @param authorCondition
+     * @return true if exists, else false
+     */
     private boolean findByCondition(AuthorCondition authorCondition) {
         logger.debug("findByCondition");
         try(final Connection connection = OracleDAOFactory.getConnection();
@@ -98,6 +128,11 @@ public class OracleAuthorDao implements AuthorDao {
         return false;
     }
 
+    /**
+     * Find author
+     * @param author author
+     * @return autho id in Author table
+     */
     @Override
     public int findAuthor(Author author) {
         logger.debug("findAuthor");

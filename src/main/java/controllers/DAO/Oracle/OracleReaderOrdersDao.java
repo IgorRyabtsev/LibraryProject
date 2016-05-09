@@ -21,9 +21,21 @@ import java.util.Map;
 /**
  * Created by igor on 22.04.16.
  */
+
+/**
+ * Class for working with DB table OrdNum
+ * @author igor
+ */
+
 public class OracleReaderOrdersDao implements ReaderOrdersDao {
 
     private static final Logger logger = Logger.getLogger(OracleReaderOrdersDao.class);
+
+    /**
+     * Return list of {@link Instance} - not given instances by email
+     * @param email reader email
+     * @return list og Instances
+     */
     @Override
     public List<Instance> getListOfOrdersByEmail(String email) {
         List<Instance> inst = new ArrayList<>();
@@ -75,6 +87,12 @@ public class OracleReaderOrdersDao implements ReaderOrdersDao {
         return inst;
     }
 
+    /**
+     * Insert new order into OrdNum table
+     * @param reader {@link Reader}
+     * @param instance {@link Instance}
+     * @return true if insertion is ok, else false
+     */
     @Override
     public boolean insertOrder(Reader reader, Instance instance) {
         if (reader == null || instance == null) {
@@ -94,6 +112,11 @@ public class OracleReaderOrdersDao implements ReaderOrdersDao {
         }
     }
 
+    /**
+     * Return list of instances, that orders {@link Reader}
+     * @param r {@link Reader}
+     * @return list of instances
+     */
     @Override
     public List<Map.Entry<Instance, List<Author>>> getInstancesByReader(Reader r) {
         List<Map.Entry<Instance, List<Author>>> instances = new ArrayList<>();
@@ -107,6 +130,11 @@ public class OracleReaderOrdersDao implements ReaderOrdersDao {
         return instances;
     }
 
+    /**
+     * Get list of orders by email
+     * @param email reader email
+     * @return list of instances
+     */
     @Override
     public List<Instance> getListOfOrdersByEmailForLibrarian(String email) {
         List<Instance> inst = new ArrayList<>();
@@ -157,6 +185,11 @@ public class OracleReaderOrdersDao implements ReaderOrdersDao {
         return inst;
     }
 
+    /**
+     * Get list of instances by reader from OrdNum table
+     * @param r {@link Reader}
+     * @return list of instances
+     */
     @Override
     public List<Map.Entry<Instance, List<Author>>> getInstancesByReaderForLibrarian(Reader r) {
         List<Map.Entry<Instance, List<Author>>> instances = new ArrayList<>();
@@ -168,6 +201,13 @@ public class OracleReaderOrdersDao implements ReaderOrdersDao {
         return instances;
     }
 
+    /**
+     * Delete order from OrdNum table
+     * @param reader {@link Reader}
+     * @param book {@link Book}
+     * @param publish publish of book
+     * @return true if deleting is ok, else false
+     */
     @Override
     public boolean deleteOrderByReader(Reader reader, Book book, String publish){
         logger.debug("Delete Order");

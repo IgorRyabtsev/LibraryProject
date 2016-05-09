@@ -11,15 +11,27 @@ import java.io.IOException;
 /**
  * Created by igor on 26.04.16.
  */
+
+/**
+ * Servlet for logout
+ * @author igor
+ */
 @WebServlet(name = "SignOut", urlPatterns = "/signout")
 public class SignOut extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }
 
+    /**
+     * Logout, invalidate session
+     * @param request request
+     * @param response response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.logout();
-        HttpSession session = request.getSession(false);
+        final HttpSession session = request.getSession(false);
         if (session!= null){
             session.invalidate();
         }

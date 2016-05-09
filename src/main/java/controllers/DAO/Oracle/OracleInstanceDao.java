@@ -17,9 +17,21 @@ import java.util.*;
 /**
  * Created by igor on 21.04.16.
  */
+
+/**
+ * Class for working with DB table Instance
+ * @author igor
+ */
+
 public class OracleInstanceDao implements InstanceDao {
 
     private static final Logger logger = Logger.getLogger(OracleInstanceDao.class);
+
+    /**
+     * Get Instance by id
+     * @param id instance id
+     * @return pair of instance-authors or null (if something goes wrong return null)
+     */
     @Override
     public Map.Entry<Instance,List<Author>> getInstanceById(int id) {
         Instance instance = new Instance();
@@ -72,11 +84,21 @@ public class OracleInstanceDao implements InstanceDao {
         return instAuth;
     }
 
+    /**
+     * Return list of instances with authors
+     * @return list of instances
+     */
     @Override
     public List<Map<Instance, List<Author>>> getAll() {
         return getInstanceByNameV2(null,0);
     }
 
+    /**
+     * Get Instance by name of book
+     * @param name book name
+     * @param status book status=1 if exist in library, else 0
+     * @return list of instances
+     */
     @Override
     public List<Map<Instance, List<Author>>> getInstanceByNameV2(String name, int status) {
         String additional;
@@ -152,6 +174,12 @@ public class OracleInstanceDao implements InstanceDao {
         return instances;
     }
 
+    /**
+     * Get Instance by condition: by author and book name
+     * @param author author
+     * @param book book
+     * @return  list of instances
+     */
     @Override
     public List<Map<Instance, List<Author>>> getInstanceByCondition(Author author, Book book) {
         String additionalForBook;
@@ -227,6 +255,11 @@ public class OracleInstanceDao implements InstanceDao {
         return instances;
     }
 
+    /**
+     * Getting List of Authors by instance
+     * @param instance instance
+     * @return list of authors
+     */
     @Override
     public  List<Author> getListOfAuthors(Instance instance) {
         List<Author> authors = new ArrayList<>();
@@ -250,6 +283,11 @@ public class OracleInstanceDao implements InstanceDao {
         return authors;
     }
 
+    /**
+     * Parse Author in sql expression
+     * @param author author
+     * @return part of sql expression
+     */
     private String parseForAuthors(Author author) {
         StringBuffer expression = new StringBuffer(" where ");
         String tmp;
@@ -259,6 +297,11 @@ public class OracleInstanceDao implements InstanceDao {
         return expression.toString();
     }
 
+    /**
+     * Parse Book in sql expression
+     * @param book book
+     * @return part of sql expression
+     */
     private String parseForBook(Book book) {
         StringBuffer expression = new StringBuffer(" where ");
         String tmp;
@@ -266,6 +309,12 @@ public class OracleInstanceDao implements InstanceDao {
         return expression.toString();
     }
 
+    /**
+     * Insert new Instance
+     * @param author author
+     * @param instance instance
+     * @return true if everything is ok, else false
+     */
     @Override
     public boolean insertInstance(Author author, Instance instance) {
         logger.debug("insertion instance");
@@ -313,6 +362,11 @@ public class OracleInstanceDao implements InstanceDao {
         }
     }
 
+    /**
+     * Insert Instance by id
+     * @param id instance id
+     * @return true if everything is ok, else false
+     */
     @Override
     public boolean deleteInstanceById(int id) {
         logger.debug("Delete instance");

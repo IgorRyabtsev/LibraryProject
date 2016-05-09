@@ -3,10 +3,19 @@ package main.java.controllers.model;
 /**
  * Created by igor on 21.04.16.
  */
+
+/**
+ * Class Author
+ * @author igor
+ */
+
 public class Author {
     private final int id_a;
+    //first name
     private final String name_f;
+    //second name
     private final String name_s;
+    //patronymic
     private final String name_p;
     private int year_a;
 

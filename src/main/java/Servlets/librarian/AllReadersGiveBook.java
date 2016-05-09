@@ -14,12 +14,24 @@ import java.util.List;
 /**
  * Created by igor on 28.04.16.
  */
+
+/**
+ * Servlet for get allReaders for giving book
+ * @author igor
+ */
 @WebServlet(name = "AllReadersGiveBook", urlPatterns = "/allreadersForGivebook")
 public class AllReadersGiveBook extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }
 
+    /**
+     * Get all readers and forward to allreadersForGivebook.jsp
+     * @param request request
+     * @param response response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Reader> allReaders = Connections.getFactory().getReaderDao().getAll();
         request.setAttribute("allReaders",allReaders);

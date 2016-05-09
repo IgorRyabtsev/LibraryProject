@@ -18,6 +18,11 @@ import java.util.Map;
 /**
  * Created by igor on 28.04.16.
  */
+
+/**
+ * Servlet for taking list of instances, that reader want to take
+ * @author igor
+ */
 @WebServlet(name = "ReaderOrders", urlPatterns = "/readerorders")
 public class ReaderOrders extends HttpServlet {
 
@@ -27,6 +32,13 @@ public class ReaderOrders extends HttpServlet {
 
     }
 
+    /**
+     * Get list of instances, that reader want to take, info from table OrdNum
+     * @param request request
+     * @param response response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (request.getParameter("id") == null) {
             logger.error("Parameter id is null!");
@@ -34,7 +46,7 @@ public class ReaderOrders extends HttpServlet {
             return;
         }
 
-        int idReader;
+        final int idReader;
         try {
             idReader = Integer.valueOf(request.getParameter("id"));
         } catch (NumberFormatException e) {
@@ -43,7 +55,7 @@ public class ReaderOrders extends HttpServlet {
             e.printStackTrace();
             return;
         }
-        Reader readerById = Connections.getFactory().getReaderDao().getReaderById(idReader);
+        final Reader readerById = Connections.getFactory().getReaderDao().getReaderById(idReader);
         List<Map.Entry<Instance, List<Author>>> instancesByReader = Connections.getFactory().getReaderOrdersDao().getInstancesByReaderForLibrarian(readerById);
         request.setAttribute("instances",instancesByReader);
         request.setAttribute("readers",readerById);

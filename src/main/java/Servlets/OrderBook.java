@@ -18,9 +18,22 @@ import java.util.Map;
 /**
  * Created by igor on 26.04.16.
  */
+
+/**
+ * Servlet for ordering book by Reader
+ * @author igor
+ */
 @WebServlet(name = "OrderBook",urlPatterns = "/orderbook")
 public class OrderBook extends HttpServlet {
     private final Logger logger = Logger.getLogger(OrderBook.class);
+
+    /**
+     * Add order for user into OrdNum table
+     * @param request request
+     * @param response response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         if (request.getParameter("id") == null) {
@@ -29,7 +42,7 @@ public class OrderBook extends HttpServlet {
             return;
         }
 
-        int instanceId;
+        final int instanceId;
         try {
             instanceId = Integer.valueOf(request.getParameter("id"));
         } catch (NumberFormatException e) {
@@ -39,9 +52,14 @@ public class OrderBook extends HttpServlet {
             return;
         }
 
-        Reader reader = (Reader) request.getSession().getAttribute("user_session");
-        Map.Entry<Instance,List<Author>> instance =  Connections.getFactory().getInstanceDao().getInstanceById(instanceId);
+        final Reader reader = (Reader) request.getSession().getAttribute("user_session");
+        if (reader == null) {
+            logger.error("user_session troubles!");
+            response.sendError(400);
+            return;
+        }
 
+        Map.Entry<Instance,List<Author>> instance =  Connections.getFactory().getInstanceDao().getInstanceById(instanceId);
         if (instance == null) {
             logger.error("Troubles with Instances, no Instances with such id, that in parameter");
             response.sendError(400);
@@ -56,13 +74,20 @@ public class OrderBook extends HttpServlet {
         response.sendRedirect("/avaliablebooks");
     }
 
+    /**
+     * Get information about current instance with such id
+     * @param request request
+     * @param response response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (request.getParameter("id") == null) {
             logger.error("id is null!");
             response.sendError(400);
             return;
         }
-        int instanceId;
+        final int instanceId;
         try {
             instanceId = Integer.valueOf(request.getParameter("id"));
         } catch (NumberFormatException e) {

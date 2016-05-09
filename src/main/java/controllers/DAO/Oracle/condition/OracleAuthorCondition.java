@@ -6,7 +6,17 @@ import main.java.controllers.DAO.condition.AuthorCondition;
 /**
  * Created by igor on 14.04.16.
  */
+
+/**
+ * Class OracleAuthorConditon for finding Author by condition,
+ * @author igor
+ */
+
 public class OracleAuthorCondition extends AuthorCondition {
+    /**
+     * Return part of sql expression for finding author
+     * @return part of sql expression
+     */
     @Override
     public String getExpression() {
         StringBuffer expression = new StringBuffer();

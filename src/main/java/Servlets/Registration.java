@@ -17,18 +17,40 @@ import java.util.regex.Pattern;
 /**
  * Created by igor on 25.04.16.
  */
+
+/**
+ * Servlet for registration
+ * @author igor
+ */
 @WebServlet(name = "registration", urlPatterns = "/signup")
 public class Registration extends HttpServlet {
     private final Logger logger = Logger.getLogger(Registration.class);
     private final Pattern p = Pattern.compile("[0-9a-z_]+@[0-9a-z_^\\.]+\\.[a-z]{2,3}");
     private Matcher m;
+
+    /**
+     * Registration new user
+     * @param request request
+     * @param response response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String namef = request.getParameter("namef");
-        String names = request.getParameter("names");
-        String namep = request.getParameter("namep");
-        String year = request.getParameter("year");
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
+
+        if(request.getParameter("namef") == null || request.getParameter("names") == null ||
+                request.getParameter("namep") == null || request.getParameter("year") == null ||
+                request.getParameter("email") == null || request.getParameter("password") == null) {
+            logger.error("Troubles with parameters");
+            response.sendError(400);
+            return;
+        }
+
+        final String namef = request.getParameter("namef");
+        final String names = request.getParameter("names");
+        final String namep = request.getParameter("namep");
+        final String year = request.getParameter("year");
+        final String email = request.getParameter("email");
+        final String password = request.getParameter("password");
 
         //some empty values
         if(namef.trim().isEmpty() || names.trim().isEmpty() || namep.trim().isEmpty() ||
@@ -40,7 +62,7 @@ public class Registration extends HttpServlet {
         }
 
         //wrong year format
-        Integer yearOfBirth;
+        final Integer yearOfBirth;
         try {
             yearOfBirth = new Integer(year);
         }catch (NumberFormatException e) {
@@ -66,7 +88,7 @@ public class Registration extends HttpServlet {
             return;
         }
         //such email is already exist
-        Reader reader = Connections.getFactory().getReaderDao().getReaderByEmail(email);
+        final Reader reader = Connections.getFactory().getReaderDao().getReaderByEmail(email);
         if(reader != null) {
             logger.debug("Wrong such email is already exists");
             request.setAttribute("messageSignUp","emailExists");
@@ -74,7 +96,7 @@ public class Registration extends HttpServlet {
             return;
         }
 
-        Reader newReader = new Reader(0,namef,names,namep,yearOfBirth,email,EncodingPassword.hash(password),"user");
+        final Reader newReader = new Reader(0,namef,names,namep,yearOfBirth,email,EncodingPassword.hash(password),"user");
         if (Connections.getFactory().getReaderDao().insertReader(newReader) == false) {
             logger.error("Trouble with insertion new Reader");
             response.sendError(400);
@@ -87,6 +109,10 @@ public class Registration extends HttpServlet {
         request.getRequestDispatcher("/WEB-INF/jsp/signup.jsp").forward(request, response);
     }
 
+    /**
+     * Get current year
+     * @return current year
+     */
     private static int getCurrentYear() {
         java.util.Calendar calendar = java.util.Calendar.getInstance(java.util.TimeZone.getDefault(), java.util.Locale.getDefault());
         calendar.setTime(new java.util.Date());

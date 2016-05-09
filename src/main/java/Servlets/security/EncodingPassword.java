@@ -6,8 +6,14 @@ import java.security.NoSuchAlgorithmException;
 /**
  * Created by igor on 25.04.16.
  */
+
+/**
+ * Class to encode password to md5
+ * @author igor
+ */
 public class EncodingPassword {
     private static final MessageDigest md5;
+
     static {
         try {
             md5 = MessageDigest.getInstance("MD5");
@@ -16,6 +22,11 @@ public class EncodingPassword {
         }
     }
 
+    /**
+     * Gives hash of password
+     * @param string password
+     * @return password hash
+     */
     public static String hash(String string) {
         final StringBuilder result = new StringBuilder();
         md5.reset();

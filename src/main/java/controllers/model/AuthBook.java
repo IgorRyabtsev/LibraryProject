@@ -3,6 +3,12 @@ package main.java.controllers.model;
 /**
  * Created by igor on 23.04.16.
  */
+
+/**
+ * Class AuthBook for Findin all authors of book
+ * @author igor
+ */
+
 public class AuthBook {
     private final Author author;
     private final Book book;

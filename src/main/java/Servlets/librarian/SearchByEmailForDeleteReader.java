@@ -16,20 +16,39 @@ import java.util.List;
 /**
  * Created by igor on 03.05.16.
  */
+
+/**
+ * Servlet for searching user to delete him
+ * @author igor
+ */
 @WebServlet(name = "SearchByEmailForDeleteReader", urlPatterns = "/searchbyemailForDeleteReader")
 public class SearchByEmailForDeleteReader extends HttpServlet {
 
     private final Logger logger = Logger.getLogger(SearchByEmailForDeleteReader.class);
 
+    /**
+     * Search user by email abd forward him on deleteReaderList.jsp
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String email = request.getParameter("email");
+
+        if(request.getParameter("email") == null) {
+            logger.error("Troubles with email parameter");
+            response.sendError(400);
+            return;
+        }
+
+        final String email = request.getParameter("email");
         if(email.isEmpty() || email.trim().isEmpty()) {
             logger.debug("Some empty fields");
             response.sendRedirect("/deleteReader");
             return;
         }
         List<Reader> allReaders = new ArrayList<>();
-        Reader readerByEmail = Connections.getFactory().getReaderDao().getReaderByEmail(email);
+        final Reader readerByEmail = Connections.getFactory().getReaderDao().getReaderByEmail(email);
         if (readerByEmail!=null) {
             allReaders.add(readerByEmail);
         }

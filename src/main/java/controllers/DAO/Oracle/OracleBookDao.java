@@ -16,9 +16,19 @@ import java.util.List;
  * Created by igor on 21.04.16.
  */
 
+/**
+ * Class for working with DB table Book
+ * @author igor
+ */
+
 public class OracleBookDao implements BookDao {
 
     private static final Logger logger = Logger.getLogger(OracleBookDao.class);
+
+    /**
+     * Get list of {@link Book}
+     * @return list of book
+     */
     @Override
     public List<Book> getAll() {
         List<Book> books = new ArrayList<>();
@@ -37,12 +47,23 @@ public class OracleBookDao implements BookDao {
         return books;
     }
 
+    /**
+     * Parse ResultSet to take Book
+     * @param rs ResultSet
+     * @return Book
+     * @throws SQLException
+     */
     private Book parseResultSet(ResultSet rs) throws SQLException {
         Book book = new Book(rs.getInt("id_b"),
                 rs.getString("name_b"));
         return book;
     }
 
+    /**
+     * Insert new book
+     * @param book book
+     * @return true if ok, else false
+     */
     @Override
     public boolean insertBook(Book book) {
         if (book == null) {
@@ -62,12 +83,22 @@ public class OracleBookDao implements BookDao {
         return false;
     }
 
+    /**
+     * Creating part of sql expression for insertion into the Book Table
+     * @param book book
+     * @return part of sql exception
+     */
     private String parseforInsert(Book book) {
         StringBuffer tmp = new StringBuffer();
         tmp.append("'" + book.getName_b()+"'");
         return tmp.toString();
     }
 
+    /**
+     * Finding book
+     * @param book book
+     * @return book id
+     */
     @Override
     public int findBook(Book book) {
         logger.debug("findBook");

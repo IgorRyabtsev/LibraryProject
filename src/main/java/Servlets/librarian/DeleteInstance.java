@@ -17,18 +17,30 @@ import java.util.Map;
 /**
  * Created by igor on 27.04.16.
  */
+
+/**
+ * Servlet for deletion instance
+ * @author igor
+ */
 @WebServlet(name = "DeleteInstance", urlPatterns = "/deleteinstance")
 public class DeleteInstance extends HttpServlet {
 
     private final Logger logger = Logger.getLogger(DeleteInstance.class);
 
+    /**
+     * Delete instance by id instance from parameter
+     * @param request request
+     * @param response response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (request.getParameter("id") == null) {
             logger.error("Parameter id is null");
             response.sendError(400);
             return;
         }
-        int instanceId;
+        final int instanceId;
         try {
             instanceId = Integer.valueOf(request.getParameter("id"));
         } catch (NumberFormatException e) {
@@ -37,17 +49,26 @@ public class DeleteInstance extends HttpServlet {
             e.printStackTrace();
             return;
         }
-        Connections.getFactory().getInstanceDao().deleteInstanceById(instanceId);
+        if ( !Connections.getFactory().getInstanceDao().deleteInstanceById(instanceId)) {
+            logger.error("Troubles with delete reader");
+        }
         response.sendRedirect("/avaliablebooks");
     }
 
+    /**
+     * Get information about instance and forward to delete instance form: deleteinstance.jsp
+     * @param request request
+     * @param response response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (request.getParameter("id") == null) {
             logger.error("Parameter id is null");
             response.sendError(400);
             return;
         }
-        int instanceId;
+        final int instanceId;
         try {
             instanceId = Integer.valueOf(request.getParameter("id"));
         } catch (NumberFormatException e) {

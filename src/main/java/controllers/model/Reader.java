@@ -3,11 +3,21 @@ package main.java.controllers.model;
 /**
  * Created by igor on 21.04.16.
  */
+
+/**
+ * Class Reader
+ * @author igor
+ */
+
 public class Reader {
     private final int id_r;
+    //first name
     private String namer_f;
+    //second name
     private String namer_s;
+    //patronymic name
     private String namer_p;
+    //year of birth
     private final int year;
     private String email;
     private String password;

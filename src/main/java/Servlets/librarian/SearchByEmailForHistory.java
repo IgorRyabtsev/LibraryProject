@@ -17,11 +17,23 @@ import java.util.List;
 /**
  * Created by igor on 02.05.16.
  */
+
+/**
+ * Servlet for searching user by email to look through his history
+ * @author igor
+ */
 @WebServlet(name = "SearchByEmailForHistory", urlPatterns = "/searchbyemailForHistory")
 public class SearchByEmailForHistory extends HttpServlet {
 
     private final Logger logger = Logger.getLogger(SearchByEmailForHistory.class);
 
+    /**
+     * Get orders by email of user
+     * @param request request
+     * @param response response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         if(request.getParameter("email") == null) {
@@ -30,7 +42,7 @@ public class SearchByEmailForHistory extends HttpServlet {
             return;
         }
 
-        String email = request.getParameter("email");
+        final String email = request.getParameter("email");
         if(email.isEmpty() || email.trim().isEmpty()) {
             logger.debug("Some empty fields");
             response.sendRedirect("/ordershistory");

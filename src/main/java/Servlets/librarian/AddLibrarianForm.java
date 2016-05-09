@@ -18,19 +18,33 @@ import java.util.Map;
 /**
  * Created by igor on 27.04.16.
  */
+
+/**
+ * Servlet for make librarian user
+ * @author igor
+ */
+
 @WebServlet(name = "AddLibrarianForm", urlPatterns = "/addlibrarianform")
 public class AddLibrarianForm extends HttpServlet {
 
     private final Logger logger = Logger.getLogger(AddLibrarianForm.class);
 
+    /**
+     * Create reader to librarian
+     * @param request request
+     * @param response response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
         if (request.getParameter("id") == null) {
             logger.error("Parameter id is null!");
             response.sendError(400);
             return;
         }
 
-        int idReader;
+        final int idReader;
         try {
             idReader = Integer.valueOf(request.getParameter("id"));
         } catch (NumberFormatException e) {
@@ -39,10 +53,20 @@ public class AddLibrarianForm extends HttpServlet {
             e.printStackTrace();
             return;
         }
-        Connections.getFactory().getReaderDao().makeLibrarian(idReader);
+
+        if (!Connections.getFactory().getReaderDao().makeLibrarian(idReader)) {
+            logger.error("Troubles with making librarian!");
+        }
         response.sendRedirect("/addlibrarian");
     }
 
+    /**
+     * Get information about Reader and forward it to make librarian Form: addlibrarianForm.jsp
+     * @param request request
+     * @param response response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (request.getParameter("id") == null) {
             logger.error("Parameter id is null!");
@@ -50,7 +74,7 @@ public class AddLibrarianForm extends HttpServlet {
             return;
         }
 
-        int idReader;
+        final int idReader;
         try {
             idReader = Integer.valueOf(request.getParameter("id"));
         } catch (NumberFormatException e) {
@@ -59,7 +83,7 @@ public class AddLibrarianForm extends HttpServlet {
             e.printStackTrace();
             return;
         }
-        Reader reader = Connections.getFactory().getReaderDao().getReaderById(idReader);
+        final Reader reader = Connections.getFactory().getReaderDao().getReaderById(idReader);
         request.setAttribute("reader", reader);
         request.getRequestDispatcher("/WEB-INF/jsp/librarian/addlibrarianForm.jsp").forward(request, response);
     }

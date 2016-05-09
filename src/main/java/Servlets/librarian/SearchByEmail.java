@@ -20,28 +20,46 @@ import java.util.Map;
 /**
  * Created by igor on 28.04.16.
  */
+
+/**
+ * Servlet for searching user, when librarian on giving-book page
+ * @author igor
+ */
 @WebServlet(name = "SearchByEmail", urlPatterns = "/searchbyemail")
 public class SearchByEmail extends HttpServlet {
 
     private final Logger logger = Logger.getLogger(SearchByEmail.class);
 
+    /**
+     * Find user by email and forward on allReaders.jsp
+     * @param request request
+     * @param response response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String email = request.getParameter("email");
+
+        if(request.getParameter("email") == null) {
+            logger.error("Troubles with email parameter");
+            response.sendError(400);
+            return;
+        }
+        final String email = request.getParameter("email");
         if(email.isEmpty() || email.trim().isEmpty()) {
             logger.debug("Some empty fields");
             response.sendRedirect("/allreaders");
             return;
         }
         List<Reader> allReaders = new ArrayList<>();
-        Reader readerByEmail = Connections.getFactory().getReaderDao().getReaderByEmail(email);
+        final Reader readerByEmail = Connections.getFactory().getReaderDao().getReaderByEmail(email);
         if (readerByEmail!=null) {
             allReaders.add(readerByEmail);
         }
         request.setAttribute("allReaders",allReaders);
         request.getRequestDispatcher("/WEB-INF/jsp/librarian/allReaders.jsp").forward(request, response);
-        response.sendRedirect("/allreaders");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
     }
 }

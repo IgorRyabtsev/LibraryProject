@@ -21,6 +21,11 @@ import java.util.Map;
 /**
  * Created by igor on 28.04.16.
  */
+
+/**
+ * Servlet for give Reader history
+ * @author igor
+ */
 @WebServlet(name = "ReaderHistory", urlPatterns = "/readerhistory")
 public class ReaderHistory extends HttpServlet {
 
@@ -30,6 +35,13 @@ public class ReaderHistory extends HttpServlet {
 
     }
 
+    /**
+     * Get user's history and forward to readerhistory
+     * @param request request
+     * @param response response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (request.getParameter("id") == null) {
             logger.error("Parameter id is null!");
@@ -37,7 +49,7 @@ public class ReaderHistory extends HttpServlet {
             return;
         }
 
-        int idReader;
+        final int idReader;
         try {
             idReader = Integer.valueOf(request.getParameter("id"));
         } catch (NumberFormatException e) {
@@ -46,7 +58,8 @@ public class ReaderHistory extends HttpServlet {
             e.printStackTrace();
             return;
         }
-        Reader reader = Connections.getFactory().getReaderDao().getReaderById(idReader);
+
+        final Reader reader = Connections.getFactory().getReaderDao().getReaderById(idReader);
         List<Orders> ordersByEmail = Connections.getFactory().getOrdersDao().getOrdersByEmail(reader.getEmail(),false);
         List<Map.Entry<Orders,List<Author>> > history = new ArrayList<>();
         for (Orders orders:ordersByEmail) {

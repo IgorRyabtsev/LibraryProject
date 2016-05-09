@@ -3,6 +3,11 @@ package main.java.controllers.model;
 /**
  * Created by igor on 22.04.16.
  */
+
+/**
+ * Class ReaderOrders
+ * @author igor
+ */
 public class ReaderOrders {
     private Reader reader;
     private Book book;

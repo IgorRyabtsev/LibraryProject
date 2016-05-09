@@ -16,14 +16,25 @@ import java.util.Map;
 /**
  * Created by igor on 26.04.16.
  */
+
+/**
+ * Servlet for get all avaliable books
+ * @author igor
+ */
 @WebServlet(name = "AllAvaliaBooks", urlPatterns = "/avaliablebooks")
 public class AllAvaliaBooks extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }
 
+    /**
+     * Get all available books
+     * @param request request
+     * @param response response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         List<Map<Instance, List<Author>>> allInstances = Connections.getFactory().getInstanceDao().getInstanceByNameV2(null,1);
         request.setAttribute("instances",allInstances);
         request.getRequestDispatcher("/WEB-INF/jsp/avaliablebooks.jsp").forward(request, response);

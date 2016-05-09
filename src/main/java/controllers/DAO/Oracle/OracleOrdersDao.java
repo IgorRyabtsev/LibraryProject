@@ -14,14 +14,31 @@ import java.util.List;
 /**
  * Created by igor on 22.04.16.
  */
+
+/**
+ * Class for working with DB table Orders
+ * @author igor
+ */
+
 public class OracleOrdersDao implements OrdersDao {
 
     private static final Logger logger = Logger.getLogger(OracleOrdersDao.class);
+
+    /**
+     * Get list of orders
+     * @return list of orders
+     */
     @Override
     public List<Orders> getAllOrders() {
         return getOrdersByEmail(null,false);
     }
 
+    /**
+     * Get order by email
+     * @param email reader email
+     * @param isRetDateNull if we need return date == null, then =true, else false
+     * @return list of orders
+     */
     @Override
     public List<Orders> getOrdersByEmail(String email, boolean isRetDateNull) {
         List<Orders> orders = new ArrayList<>();
@@ -69,6 +86,13 @@ public class OracleOrdersDao implements OrdersDao {
         return orders;
     }
 
+    /**
+     * Give book to reader
+     * @param id_r reader id
+     * @param date release date
+     * @param instance instance
+     * @return true if everything is ok, else false
+     */
     @Override
     public boolean giveBook(int id_r, Date date, Instance instance) {
         int exec;
@@ -117,6 +141,11 @@ public class OracleOrdersDao implements OrdersDao {
         }
     }
 
+    /**
+     * Return release date by order id
+     * @param id order id
+     * @return release date if something goes wrong return null
+     */
     @Override
     public Date getReleaseDateById(int id) {
         logger.debug("Get date by id");
@@ -134,6 +163,13 @@ public class OracleOrdersDao implements OrdersDao {
         return null;
     }
 
+    /**
+     * Take book from reader
+     * @param id order id
+     * @param date returning date
+     * @param comments comments by book
+     * @return true if taking is ok, else false
+     */
     @Override
     public boolean takeBook(int id, Date date, String comments){
         int exec;
@@ -165,6 +201,11 @@ public class OracleOrdersDao implements OrdersDao {
         }
     }
 
+    /**
+     * Get order by id
+     * @param id order id
+     * @return {@link Orders}, if no such order or if something goes wrong return null
+     */
     @Override
     public Orders getOrderById(int id) {
         logger.debug("Get order id");
@@ -204,6 +245,11 @@ public class OracleOrdersDao implements OrdersDao {
         return null;
     }
 
+    /**
+     * Delete order by id
+     * @param id order id
+     * @return true if everything is ok, else false
+     */
     @Override
     public boolean deleteById(int id) {
         logger.debug("delete order");
@@ -219,6 +265,13 @@ public class OracleOrdersDao implements OrdersDao {
         }
     }
 
+    /**
+     * Set release and return date
+     * @param id order id
+     * @param rel_date release date
+     * @param ret_date return date
+     * @return true if everything is ok, else false
+     */
     @Override
     public boolean setDate(int id, Date rel_date, Date ret_date){
         logger.debug("update Orders");

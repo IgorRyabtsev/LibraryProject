@@ -14,9 +14,21 @@ import java.util.List;
 /**
  * Created by igor on 21.04.16.
  */
+
+/**
+ * Class for working with DB table Reader
+ * @author igor
+ */
+
 public class OracleReaderDao implements ReaderDao {
 
     private static final Logger logger = Logger.getLogger(OracleReaderDao.class);
+
+    /**
+     * Get reader by email
+     * @param email reader's email
+     * @return {@link Reader} by email or if he's not exists or troubles with DB - null
+     */
     @Override
     public Reader getReaderByEmail(String email) {
         logger.debug("getReaderByEmail");
@@ -42,13 +54,19 @@ public class OracleReaderDao implements ReaderDao {
         return null;
     }
 
+    /**
+     * Get reader by id
+     * @param id reader id
+     * @return {@link Reader} by id or if he's not exists or troubles with DB - null
+     */
     @Override
     public Reader getReaderById(int id) {
         logger.debug("getReaderById");
         try(final Connection connection = OracleDAOFactory.getConnection();
             final Statement statement = connection.createStatement();
             final ResultSet rs = statement.executeQuery(
-                     "SELECT id_r, namer_f, namer_s, namer_p, year, email, password, role FROM Reader where id_r = " + id)) {
+                     "SELECT id_r, namer_f, namer_s, namer_p, year, email, password, " +
+                             "role FROM Reader where id_r = " + id)) {
             if (rs.next()) {
                 return new Reader(rs.getInt("id_r"),
                                     rs.getString("namer_f"),
@@ -66,6 +84,11 @@ public class OracleReaderDao implements ReaderDao {
         return null;
     }
 
+    /**
+     * Insert new {@link Reader}
+     * @param r - reader
+     * @return true if insertion ok, else false
+     */
     @Override
     public boolean insertReader(Reader r) {
         if (r == null) {
@@ -85,6 +108,11 @@ public class OracleReaderDao implements ReaderDao {
         }
     }
 
+    /**
+     * Parse Reader for insertion into sql expression
+     * @param r reader
+     * @return part of sql expression
+     */
     private String parseforInsert(Reader r) {
         StringBuffer tmp = new StringBuffer();
         tmp.append("'" + r.getNamer_f()+"'" + ", ");
@@ -97,6 +125,10 @@ public class OracleReaderDao implements ReaderDao {
         return tmp.toString();
     }
 
+    /**
+     * Get list of readers
+     * @return list of {@link Reader}
+     */
     @Override
     public List<Reader> getAll() {
         List<Reader> readers = new ArrayList<>();
@@ -114,6 +146,11 @@ public class OracleReaderDao implements ReaderDao {
         return readers;
     }
 
+    /**
+     * Make reader role librarian
+     * @param id reader id
+     * @return true if everything ok, else false
+     */
     @Override
     public boolean makeLibrarian(int id) {
         logger.debug("Updating role");
@@ -127,6 +164,11 @@ public class OracleReaderDao implements ReaderDao {
         }
     }
 
+    /**
+     * Delete {@link Reader} by id
+     * @param id reader id
+     * @return true if deleting is ok, else false
+     */
     @Override
     public boolean deleteReaderById(int id) {
         logger.debug("Delete reader");
@@ -140,6 +182,12 @@ public class OracleReaderDao implements ReaderDao {
         }
     }
 
+    /**
+     * Parse ResultSet and take Reader from it
+     * @param rs ResultSet
+     * @return Reader
+     * @throws SQLException
+     */
     private Reader parseResultSet(ResultSet rs) throws SQLException {
         return new Reader(rs.getInt("id_r"),
                 rs.getString("namer_f"),

@@ -16,20 +16,38 @@ import java.util.List;
 /**
  * Created by igor on 28.04.16.
  */
+
+/**
+ * Servlet for search user, for give him book
+ */
 @WebServlet(name = "SearchByEmailForGiveBook", urlPatterns = "/searchbyemailForGiveBook")
 public class SearchByEmailForGiveBook extends HttpServlet {
 
     private final Logger logger = Logger.getLogger(SearchByEmailForGiveBook.class);
 
+    /**
+     * Get user by email for giving him book
+     * @param request request
+     * @param response response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String email = request.getParameter("email");
+
+        if(request.getParameter("email") == null) {
+            logger.error("Troubles with email parameter");
+            response.sendError(400);
+            return;
+        }
+
+        final String email = request.getParameter("email");
         if(email.isEmpty() || email.trim().isEmpty()) {
             logger.debug("Some empty fields");
             response.sendRedirect("/allreadersForGivebook");
             return;
         }
         List<Reader> allReaders = new ArrayList<>();
-        Reader readerByEmail = Connections.getFactory().getReaderDao().getReaderByEmail(email);
+        final Reader readerByEmail = Connections.getFactory().getReaderDao().getReaderByEmail(email);
         if (readerByEmail!=null) {
             allReaders.add(readerByEmail);
         }

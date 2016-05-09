@@ -15,12 +15,24 @@ import java.util.List;
  * Created by igor on 27.04.16.
  */
 
+/**
+ * Servlet for getting all readers for giving book to user
+ * @author igor
+ */
+
 @WebServlet(name = "AddLibrarian", urlPatterns = "/addlibrarian")
 public class AddLibrarian extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }
 
+    /**
+     * Get all readers
+     * @param request request
+     * @param response response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Reader> allReaders = Connections.getFactory().getReaderDao().getAll();
         request.setAttribute("allReaders",allReaders);

@@ -3,6 +3,12 @@ package main.java.controllers.model;
 /**
  * Created by igor on 21.04.16.
  */
+
+/**
+ * Class Instance
+ * @author igor
+ */
+
 public class Instance {
     private final int id_i;
     private final Book book;

@@ -18,14 +18,26 @@ import java.util.Map;
 /**
  * Created by igor on 26.04.16.
  */
+
+/**
+ * Class to take all order's instances of user
+ * @author igor
+ */
 @WebServlet(name = "UserOrders", urlPatterns = "/userorders")
 public class UserOrders extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }
 
+    /**
+     * Get all order's instances and forward to userorders.jsp"
+     * @param request request
+     * @param response response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Reader reader = (Reader) request.getSession().getAttribute("user_session");
+        final Reader reader = (Reader) request.getSession().getAttribute("user_session");
         List<Map.Entry<Instance, List<Author>>> instancesByReader = Connections.getFactory().getReaderOrdersDao().getInstancesByReaderForLibrarian(reader);
         request.setAttribute("instances",instancesByReader);
         request.getRequestDispatcher("/WEB-INF/jsp/userorders.jsp").forward(request, response);

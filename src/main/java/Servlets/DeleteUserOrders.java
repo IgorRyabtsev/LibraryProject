@@ -18,11 +18,23 @@ import java.util.Map;
 /**
  * Created by igor on 26.04.16.
  */
+
+/**
+ * Servlet for deletion order from table OrdNum
+ * @author igor
+ */
 @WebServlet(name = "DeleteUserOrders", urlPatterns = "/deleteuserorder")
 public class DeleteUserOrders extends HttpServlet {
 
     private final Logger logger = Logger.getLogger(DeleteUserOrders.class);
 
+    /**
+     * Delete user order from OrdNum table
+     * @param request request
+     * @param response response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (request.getParameter("id") == null) {
             logger.error("id is null!");
@@ -36,7 +48,7 @@ public class DeleteUserOrders extends HttpServlet {
         }
 
 
-        int instanceId;
+        final int instanceId;
         try {
             instanceId = Integer.valueOf(request.getParameter("id"));
         } catch (NumberFormatException e) {
@@ -46,9 +58,9 @@ public class DeleteUserOrders extends HttpServlet {
             return;
         }
 
-        String publish = request.getParameter("publish");
+        final String publish = request.getParameter("publish");
         Map.Entry<Instance, List<Author>> instanceById = Connections.getFactory().getInstanceDao().getInstanceById(instanceId);
-        Reader reader = (Reader) request.getSession().getAttribute("user_session");
+        final Reader reader = (Reader) request.getSession().getAttribute("user_session");
 
         Connections.getFactory().getReaderOrdersDao().deleteOrderByReader(reader,instanceById.getKey().getBook(),publish);
 
@@ -61,6 +73,13 @@ public class DeleteUserOrders extends HttpServlet {
         response.sendRedirect("/userorders");
     }
 
+    /**
+     * Forward to delete order form
+     * @param request request
+     * @param response responce
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (request.getParameter("id") == null) {
             logger.error("id is null!");
@@ -68,7 +87,7 @@ public class DeleteUserOrders extends HttpServlet {
             return;
         }
 
-        int instanceId;
+        final int instanceId;
         try {
             instanceId = Integer.valueOf(request.getParameter("id"));
         } catch (NumberFormatException e) {
@@ -78,7 +97,7 @@ public class DeleteUserOrders extends HttpServlet {
             return;
         }
 
-        Reader reader = (Reader) request.getSession().getAttribute("user_session");
+        final Reader reader = (Reader) request.getSession().getAttribute("user_session");
         List<Map.Entry<Instance, List<Author>>> instancesByReader = Connections.getFactory().getReaderOrdersDao().getInstancesByReader(reader);
         if(instancesByReader == null) {
             logger.error("Troubles with instances by Reader!");

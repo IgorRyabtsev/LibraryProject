@@ -21,19 +21,32 @@ import java.util.Map;
 /**
  * Created by igor on 28.04.16.
  */
+
+/**
+ * Servlet for returning book by reader
+ * @author igor
+ */
 @WebServlet(name = "ReturnBook", urlPatterns = "/returnbook")
 public class ReturnBook extends HttpServlet {
 
     private final Logger logger = Logger.getLogger(ReturnBook.class);
 
+    /**
+     * Return book with such id_i-instance id and order - order id,
+     * taked from parameters
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (request.getParameter("id_i") == null || request.getParameter("order") == null) {
             logger.error("Parametres id_i or order is null!");
             response.sendError(400);
             return;
         }
-        int idOrder;
-        int idInstance;
+        final int idOrder;
+        final int idInstance;
         try {
             idOrder = Integer.valueOf(request.getParameter("order"));
             idInstance = Integer.valueOf(request.getParameter("id_i"));
@@ -44,13 +57,13 @@ public class ReturnBook extends HttpServlet {
             return;
         }
 
-        String date = request.getParameter("date");
-        java.sql.Date sqlDate;
+        final String date = request.getParameter("date");
+        final java.sql.Date sqlDate;
         try {
             sqlDate = java.sql.Date.valueOf(date);
         } catch (IllegalArgumentException e) {
             logger.debug("Empty Date");
-            String message = "wrongdate";
+            final String message = "wrongdate";
             request.setAttribute("message",message);
             Map.Entry<Instance, List<Author>> instanceById = Connections.getFactory().getInstanceDao().getInstanceById(idInstance);
             request.setAttribute("instAuth",instanceById);
@@ -58,11 +71,11 @@ public class ReturnBook extends HttpServlet {
             request.getRequestDispatcher("/WEB-INF/jsp/librarian/returnbook.jsp").forward(request, response);
             return;
         }
-        Date releaseDateById = Connections.getFactory().getOrdersDao().getReleaseDateById(idOrder);
 
+        final Date releaseDateById = Connections.getFactory().getOrdersDao().getReleaseDateById(idOrder);
         if (releaseDateById.getTime() > sqlDate.getTime()) {
             logger.debug("Not correct date.");
-            String message = "releasedatebigger";
+            final String message = "releasedatebigger";
             request.setAttribute("message",message);
             Map.Entry<Instance, List<Author>> instanceById = Connections.getFactory().getInstanceDao().getInstanceById(idInstance);
             request.setAttribute("instAuth",instanceById);
@@ -71,12 +84,21 @@ public class ReturnBook extends HttpServlet {
             return;
         }
 
-        String comments= request.getParameter("comments");
-        Connections.getFactory().getOrdersDao().takeBook(idOrder,sqlDate,comments);
+        final String comments= request.getParameter("comments");
+        if (!Connections.getFactory().getOrdersDao().takeBook(idOrder,sqlDate,comments)) {
+            logger.error("Trouble in taking book!");
+        }
         response.sendRedirect("/allreaders");
-
     }
 
+    /**
+     * Getting id order and id_instance, taking instance by id order
+     * and forward to return book form
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         if (request.getParameter("id") == null || request.getParameter("id_i") == null) {
@@ -84,13 +106,13 @@ public class ReturnBook extends HttpServlet {
             response.sendError(400);
             return;
         }
-        int idOrder;
-        int idInstance;
+        final int idOrder;
+        final int idInstance;
         try {
             idOrder = Integer.valueOf(request.getParameter("id"));
             idInstance = Integer.valueOf(request.getParameter("id_i"));
         } catch (NumberFormatException e) {
-            logger.error("Troubles with \"id_i\" or \"id\" is null!");
+            logger.error("Troubles with \"id_i\" or \"id\"!");
             response.sendError(400);
             e.printStackTrace();
             return;

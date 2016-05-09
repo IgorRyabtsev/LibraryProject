@@ -5,11 +5,19 @@ import java.sql.Date;
 /**
  * Created by igor on 22.04.16.
  */
+
+/**
+ * Class Orders
+ * @author igor
+ */
+
 public class Orders {
     private final int id_o;
     private Reader reader;
     private Instance instance;
+    // book's release date
     private Date release_date;
+    // book's return date
     private Date return_date;
 
     public Orders() {

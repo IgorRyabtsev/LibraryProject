@@ -13,11 +13,23 @@ import java.io.IOException;
 /**
  * Created by igor on 02.05.16.
  */
+
+/**
+ * Servlet for delete user order from history
+ * @author igor
+ */
 @WebServlet(name = "DeleteOrderFromHistory", urlPatterns = "/deleteOrderFromHistory")
 public class DeleteOrderFromHistory extends HttpServlet {
 
     private final Logger logger = Logger.getLogger(DeleteOrderFromHistory.class);
 
+    /**
+     * Delete user order from history (by id order)
+     * @param request request
+     * @param response response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (request.getParameter("id") == null) {
             logger.error("Parameter id is null!");
@@ -25,7 +37,7 @@ public class DeleteOrderFromHistory extends HttpServlet {
             return;
         }
 
-        int idOrder;
+        final int idOrder;
         try {
             idOrder = Integer.valueOf(request.getParameter("id"));
         } catch (NumberFormatException e) {
@@ -35,7 +47,7 @@ public class DeleteOrderFromHistory extends HttpServlet {
             return;
         }
 
-        if ( Connections.getFactory().getOrdersDao().deleteById(idOrder)) {
+        if ( !Connections.getFactory().getOrdersDao().deleteById(idOrder)) {
             logger.error("Troubles with deleting from Orders!");
         }
         response.sendRedirect("/ordershistory");

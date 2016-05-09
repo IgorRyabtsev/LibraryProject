@@ -14,12 +14,24 @@ import java.util.List;
 /**
  * Created by igor on 27.04.16.
  */
+
+/**
+ * Servlet gives all orders
+ * @author igor
+ */
 @WebServlet(name = "OrdersHistory", urlPatterns = "/ordershistory")
 public class OrdersHistory extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }
 
+    /**
+     * Get all orders and forwart to ordershistory.jsp
+     * @param request request
+     * @param response response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Orders> ordersByEmail = Connections.getFactory().getOrdersDao().getAllOrders();
         request.setAttribute("history",ordersByEmail);

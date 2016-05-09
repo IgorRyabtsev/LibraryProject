@@ -16,20 +16,38 @@ import java.util.List;
 /**
  * Created by igor on 28.04.16.
  */
+
+/**
+ * Servlet for searching reader by email for librarian, to make thos user librarian
+ * @author igor
+ */
 @WebServlet(name = "SearchByEmailTakeLibrarian",urlPatterns = "/searchbyemailAddLibrarian")
 public class SearchByEmailTakeLibrarian extends HttpServlet {
 
     private final Logger logger = Logger.getLogger(SearchByEmailTakeLibrarian.class);
 
+    /**
+     * Search user by email and forward to listofreadersLibrarian.jsp
+     * @param request request
+     * @param response response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String email = request.getParameter("email");
+
+        if(request.getParameter("email") == null) {
+            logger.error("Troubles with email parameter");
+            response.sendError(400);
+            return;
+        }
+        final String email = request.getParameter("email");
         if(email.isEmpty() || email.trim().isEmpty()) {
             logger.debug("Some empty fields");
             response.sendRedirect("/addlibrarian");
             return;
         }
         List<Reader> allReaders = new ArrayList<>();
-        Reader readerByEmail = Connections.getFactory().getReaderDao().getReaderByEmail(email);
+        final Reader readerByEmail = Connections.getFactory().getReaderDao().getReaderByEmail(email);
         if (readerByEmail!=null) {
             allReaders.add(readerByEmail);
         }

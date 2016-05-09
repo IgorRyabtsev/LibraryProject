@@ -16,11 +16,23 @@ import java.util.List;
 /**
  * Created by igor on 03.05.16.
  */
+
+/**
+ * Servlet for delete reader
+ * @author igor
+ */
 @WebServlet(name = "DeleteReaderForm", urlPatterns = "/deleteReaderForm")
 public class DeleteReaderForm extends HttpServlet {
 
     private final Logger logger = Logger.getLogger(DeleteReaderForm.class);
 
+    /**
+     * Delete user if that's available : all books in the library
+     * @param request request
+     * @param response response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (request.getParameter("id") == null) {
             logger.error("Parameter id is null!");
@@ -28,7 +40,7 @@ public class DeleteReaderForm extends HttpServlet {
             return;
         }
 
-        int idReader;
+        final int idReader;
         try {
             idReader = Integer.valueOf(request.getParameter("id"));
         } catch (NumberFormatException e) {
@@ -37,7 +49,7 @@ public class DeleteReaderForm extends HttpServlet {
             return;
         }
 
-        Reader reader = Connections.getFactory().getReaderDao().getReaderById(idReader);
+        final Reader reader = Connections.getFactory().getReaderDao().getReaderById(idReader);
         if (reader == null) {
             logger.error("No such reader!");
             response.sendError(400);
@@ -46,7 +58,7 @@ public class DeleteReaderForm extends HttpServlet {
 
         if (reader.getRole().equals("librarian")) {
             logger.debug("Empty Date");
-            String message = "librarian";
+            final String message = "librarian";
             request.setAttribute("message",message);
             List<Orders> ordersByEmail = Connections.getFactory().getOrdersDao().getOrdersByEmail(reader.getEmail(), true);
             request.setAttribute("orders",ordersByEmail);
@@ -61,6 +73,13 @@ public class DeleteReaderForm extends HttpServlet {
         response.sendRedirect("/deleteReader");
     }
 
+    /**
+     * Get reader by id and forward to delete reader Form : deleteReaderForm.jsp
+     * @param request request
+     * @param response response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         if (request.getParameter("id") == null) {
             logger.error("Parameter id is null!");
@@ -76,8 +95,8 @@ public class DeleteReaderForm extends HttpServlet {
             response.sendError(400);
             return;
         }
-        Reader readerById = Connections.getFactory().getReaderDao().getReaderById(idReader);
 
+        final Reader readerById = Connections.getFactory().getReaderDao().getReaderById(idReader);
         List<Orders> ordersByEmail = Connections.getFactory().getOrdersDao().getOrdersByEmail(readerById.getEmail(), true);
         request.setAttribute("orders",ordersByEmail);
         request.setAttribute("reader",String.valueOf(idReader));
