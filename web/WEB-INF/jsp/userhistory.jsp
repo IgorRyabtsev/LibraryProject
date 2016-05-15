@@ -1,10 +1,6 @@
 <jsp:useBean id="history" scope="request"
              type="java.util.List<main.java.controllers.model.Orders>"/>
 
-<c:if test="${user_session.role==null || user_session.role.equals('librarian')}">
-    <c:redirect url="/jsp/main.jsp"></c:redirect>
-</c:if>
-
 
 <h2><fmt:message key='userhistory'/></h2>
 <div class="row">

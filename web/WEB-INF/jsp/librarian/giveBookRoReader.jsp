@@ -7,9 +7,6 @@
 <jsp:useBean id="message" scope="request"
              class="java.lang.String"/>
 
-<c:if test="${user_session.role==null || user_session.role.equals('user')}">
-    <c:redirect url="/jsp/main.jsp"></c:redirect>
-</c:if>
 
 <c:if test="${!message.equals('')}">
     <h1> <fmt:message key='${message}'/> </h1>
