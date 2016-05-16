@@ -110,7 +110,7 @@ public class OracleAuthorDao implements AuthorDao {
 
     /**
      * Find Author by condition
-     * @param authorCondition
+     * @param authorCondition condition
      * @return true if exists, else false
      */
     private boolean findByCondition(AuthorCondition authorCondition) {

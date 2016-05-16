@@ -53,17 +53,20 @@ public interface InstanceDao {
     List<Author> getListOfAuthors(Instance instance);
 
     /**
-     * Insert new Instance
-     * @param author author
-     * @param instance instance
-     * @return true if everything is ok, else false
-     */
-    boolean insertInstance(Author author, Instance instance);
-
-    /**
      * Insert Instance by id
      * @param id instance id
      * @return true if everything is ok, else false
      */
     boolean deleteInstanceById(int id);
+
+    /**
+     * Insert instance
+     * @param authors authors
+     * @param year year of book
+     * @param bookname name of book
+     * @param publish publish
+     * @param cost book cost
+     * @return true if everything is ok, else false
+     */
+    boolean insertInstance(List<Author> authors, Integer year, String bookname, String publish, Integer cost);
 }

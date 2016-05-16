@@ -310,59 +310,6 @@ public class OracleInstanceDao implements InstanceDao {
     }
 
     /**
-     * Insert new Instance
-     * @param author author
-     * @param instance instance
-     * @return true if everything is ok, else false
-     */
-    @Override
-    public boolean insertInstance(Author author, Instance instance) {
-        logger.debug("insertion instance");
-        Connections.getFactory().getAuthorDao().insertAuthor(author);
-        int id_a = Connections.getFactory().getAuthorDao().findAuthor(author);
-        if (id_a == -1) {
-            logger.error("Couldn't insert new Author");
-            return false;
-        }
-        //insert book
-        logger.debug("insertion book");
-        Connections.getFactory().getBookDao().insertBook(instance.getBook());
-        int id_b = Connections.getFactory().getBookDao().findBook(instance.getBook());
-        if (id_b == -1) {
-            logger.error("Couldn't insert new Book");
-            return false;
-        }
-
-        logger.debug("Insert Author-Book communication");
-        try(final Connection connection = OracleDAOFactory.getConnection();
-            final Statement statement = connection.createStatement()){
-
-            statement.executeUpdate(
-                    "insert into AuBook (author_id, book_id) " +
-                            "values (" + id_a + "," + id_b + ")" );
-
-        } catch (SQLException e) {
-            logger.error("SQLException insertInstance", e);
-            return false;
-        }
-
-        logger.debug("Insert Instance");
-        try(final Connection connection = OracleDAOFactory.getConnection();
-            final Statement statement = connection.createStatement()){
-
-            return statement.executeUpdate(
-                    "insert into Instance (id_book, year_b, publish, cost, status, comments) " +
-                            "values (" + id_b + ","+ instance.getYear_b() + ", '" +
-                            instance.getPublish() +"' ," + instance.getCost() + ", " +
-                            instance.getStatus() + ", '" + instance.getComments()+"')" ) >0;
-
-        } catch (SQLException e) {
-            logger.debug("SQLExcetion in insertion Instance",e);
-            return false;
-        }
-    }
-
-    /**
      * Insert Instance by id
      * @param id instance id
      * @return true if everything is ok, else false
@@ -378,6 +325,68 @@ public class OracleInstanceDao implements InstanceDao {
             logger.error("SQLException deleteInstanceById", e);
             return false;
         }
+    }
+
+    /**
+     * Insert instance
+     * @param authors authors
+     * @param year year of book
+     * @param bookname name of book
+     * @param publish publish
+     * @param cost book cost
+     * @return true if everything is ok, else false
+     */
+    @Override
+    public boolean insertInstance(List<Author> authors, Integer year, String bookname, String publish, Integer cost) {
+        logger.debug("insertion instance");
+
+        logger.debug("insertion book");
+        Connections.getFactory().getBookDao().insertBook(new Book(0, bookname));
+        int id_b = Connections.getFactory().getBookDao().findBook(new Book(0, bookname));
+        if (id_b == -1) {
+            logger.error("Couldn't insert new Book");
+            return false;
+        }
+
+        for (Author author:authors) {
+            //insert author
+            Connections.getFactory().getAuthorDao().insertAuthor(author);
+            int id_a = Connections.getFactory().getAuthorDao().findAuthor(author);
+            if (id_a == -1) {
+                logger.error("Couldn't insert new Author");
+                return false;
+            }
+            logger.debug("Insert Author-Book communication");
+            try(final Connection connection = OracleDAOFactory.getConnection();
+                final Statement statement = connection.createStatement()){
+
+                statement.executeUpdate(
+                        "insert into AuBook (author_id, book_id) " +
+                                "values (" + id_a + "," + id_b + ")" );
+
+            } catch (SQLException e) {
+                logger.error("SQLException insertInstance", e);
+                return false;
+            }
+        }
+
+
+        logger.debug("Insert Instance");
+        try(final Connection connection = OracleDAOFactory.getConnection();
+            final Statement statement = connection.createStatement()){
+
+            return statement.executeUpdate(
+                    "insert into Instance (id_book, year_b, publish, cost, status, comments) " +
+                            "values (" + id_b + ","+ year + ", '" +
+                            publish +"' ," + cost + ", " +
+                            1 + ", '')" ) >0;
+
+        } catch (SQLException e) {
+            logger.debug("SQLExcetion in insertion Instance",e);
+            return false;
+        }
+
+
     }
 
 }
