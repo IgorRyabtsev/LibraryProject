@@ -85,6 +85,17 @@ public class ReturnBook extends HttpServlet {
         }
 
         final String comments= request.getParameter("comments");
+        //too long comment
+        if (comments.length() > 150) {
+            logger.debug("Too long comment");
+            request.setAttribute("message","tooLongComment");
+            Map.Entry<Instance, List<Author>> instanceById = Connections.getFactory().getInstanceDao().getInstanceById(idInstance);
+            request.setAttribute("instAuth",instanceById);
+            request.setAttribute("order",request.getParameter("order"));
+            request.getRequestDispatcher("/WEB-INF/jsp/librarian/returnbook.jsp").forward(request, response);
+            return;
+        }
+
         if (!Connections.getFactory().getOrdersDao().takeBook(idOrder,sqlDate,comments)) {
             logger.error("Trouble in taking book!");
         }

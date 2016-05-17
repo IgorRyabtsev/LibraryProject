@@ -61,6 +61,15 @@ public class Registration extends HttpServlet {
             return;
         }
 
+        //too big size
+        if(namef.length()>100 || names.length()>100 || namep.length()>100 ||
+                email.length()>100 ) {
+            logger.debug("Too long value");
+            request.setAttribute("messageSignUp","tooLong");
+            doGet(request, response);
+            return;
+        }
+
         //wrong year format
         final Integer yearOfBirth;
         try {
