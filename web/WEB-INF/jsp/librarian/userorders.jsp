@@ -6,7 +6,7 @@
              type="main.java.controllers.model.Reader"/>
 
 
-<h2><fmt:message key='user.orders'/></h2>
+<h2><fmt:message key='user.orders.librarian'/></h2>
 
 <div class="row">
     <div class="col-md-8">
