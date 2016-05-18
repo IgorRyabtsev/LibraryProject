@@ -62,14 +62,10 @@ public class DeleteUserOrders extends HttpServlet {
         Map.Entry<Instance, List<Author>> instanceById = Connections.getFactory().getInstanceDao().getInstanceById(instanceId);
         final Reader reader = (Reader) request.getSession().getAttribute("user_session");
 
-        Connections.getFactory().getReaderOrdersDao().deleteOrderByReader(reader,instanceById.getKey().getBook(),publish);
-
-        List<Map.Entry<Instance, List<Author>>> instancesByReader = Connections.getFactory().getReaderOrdersDao().getInstancesByReader(reader);
-        if(instancesByReader == null) {
-            logger.error("Troubles with instances by Reader!");
-            response.sendError(400);
-            return;
+        if(!Connections.getFactory().getReaderOrdersDao().deleteOrderByReader(reader,instanceById.getKey().getBook(),publish)) {
+            logger.error("Troubles with deleting order!!");
         }
+
         response.sendRedirect("/userorders");
     }
 
@@ -98,9 +94,8 @@ public class DeleteUserOrders extends HttpServlet {
         }
 
         final Reader reader = (Reader) request.getSession().getAttribute("user_session");
-        List<Map.Entry<Instance, List<Author>>> instancesByReader = Connections.getFactory().getReaderOrdersDao().getInstancesByReader(reader);
-        if(instancesByReader == null) {
-            logger.error("Troubles with instances by Reader!");
+        if(reader==null) {
+            logger.error("Troubles with user_session");
             response.sendError(400);
             return;
         }

@@ -30,3 +30,14 @@
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 }
+
+.headline {
+    padding: 120px 0;
+}
+
+.headline h2 {
+    font-size: 77px;
+    color: #e74c3c;
+    /*background: #fff;*/
+    /*background: rgba(255,255,255,0.9);*/
+}

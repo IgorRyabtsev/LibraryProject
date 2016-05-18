@@ -1,6 +1,5 @@
 package main.java.controllers.DAO.Oracle;
 
-import main.java.controllers.DAO.condition.BookCondition;
 import main.java.controllers.DAO.interfaces.BookDao;
 import main.java.controllers.model.Book;
 import org.apache.log4j.Logger;
@@ -41,7 +40,6 @@ public class OracleBookDao implements BookDao {
                 books.add(parseResultSet(rs));
             }
         } catch (SQLException e) {
-//            throw new RuntimeException(e);
             logger.error("SQLException getAll",e);
         }
         return books;

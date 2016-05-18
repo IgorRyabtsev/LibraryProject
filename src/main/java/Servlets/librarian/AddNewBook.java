@@ -57,8 +57,7 @@ public class AddNewBook extends HttpServlet {
         //not correct data
         if(namef.length != namep.length || namep.length!=names.length || names.length!=yearbirth.length) {
             logger.debug("Not correct data input .");
-            String message="entercorrectData";
-            request.setAttribute("message",message);
+            request.setAttribute("message","entercorrectData");
             doGet(request, response);
             return;
         }
@@ -66,8 +65,7 @@ public class AddNewBook extends HttpServlet {
         //if no data inside namef || names
         if(!checkNames(namef,names)) {
             logger.debug("Some empty fields.");
-            String message="enterAllValues";
-            request.setAttribute("message",message);
+            request.setAttribute("message","enterAllValues");
             doGet(request, response);
             return;
         }
@@ -77,8 +75,7 @@ public class AddNewBook extends HttpServlet {
         if(bookname.trim().isEmpty() || publish.trim().isEmpty() || year.trim().isEmpty() ||
                 cost.trim().isEmpty()) {
             logger.debug("Some empty fields.");
-            String message="enterAllValues";
-            request.setAttribute("message",message);
+            request.setAttribute("message","enterAllValues");
             doGet(request, response);
             return;
         }

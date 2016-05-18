@@ -5,11 +5,13 @@
 <c:if test="${!message.equals('')}">
     <h1><fmt:message key="${message}"/></h1>
 </c:if>
+
 <div class="row">
     <div class="col-lg-12">
         <h1 class="page-header"><fmt:message key="order.addnewbook"/></h1>
     </div>
 </div>
+
 <div class="row ">
     <div class="col-md-6">
         <br>

@@ -69,7 +69,9 @@ public class GiveBookForUser extends HttpServlet {
             return;
         }
         Map.Entry<Instance, List<Author>> instance = Connections.getFactory().getInstanceDao().getInstanceById(instanceId);
-        Connections.getFactory().getOrdersDao().giveBook(readerId,sqlDate,instance.getKey());
+        if (!Connections.getFactory().getOrdersDao().giveBook(readerId,sqlDate,instance.getKey())) {
+            logger.error("Troubles with giving book!");
+        }
         response.sendRedirect("/allreadersForGivebook");
     }
 
@@ -98,6 +100,11 @@ public class GiveBookForUser extends HttpServlet {
             return;
         }
         final Reader reader = Connections.getFactory().getReaderDao().getReaderById(readerId);
+        if (reader==null) {
+            logger.error("Troubles with idReader");
+            response.sendError(400);
+            return;
+        }
         Map.Entry<Instance,List<Author>> instanceAuthorList = Connections.getFactory().getInstanceDao().getInstanceById(instanceId);
         request.setAttribute("instAuth", instanceAuthorList);
         request.setAttribute("readerForGive", reader);

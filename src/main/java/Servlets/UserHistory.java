@@ -3,6 +3,7 @@ package main.java.Servlets;
 import main.java.controllers.DAO.Connections;
 import main.java.controllers.model.Orders;
 import main.java.controllers.model.Reader;
+import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,6 +23,8 @@ import java.util.List;
  */
 @WebServlet(name = "UserHistory", urlPatterns = "/userhistory")
 public class UserHistory extends HttpServlet {
+    private static Logger logger = Logger.getLogger(UserHistory.class);
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }
@@ -35,6 +38,11 @@ public class UserHistory extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         final Reader reader = (Reader) request.getSession().getAttribute("user_session");
+        if(reader==null) {
+            logger.error("Troubles with user_session");
+            response.sendError(400);
+            return;
+        }
         List<Orders> ordersByEmail = Connections.getFactory().getOrdersDao().getOrdersByEmail(reader.getEmail(),false);
         request.setAttribute("history",ordersByEmail);
         request.getRequestDispatcher("/WEB-INF/jsp/userhistory.jsp").forward(request, response);

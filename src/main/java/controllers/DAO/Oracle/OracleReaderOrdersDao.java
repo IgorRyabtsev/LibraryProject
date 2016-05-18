@@ -98,13 +98,51 @@ public class OracleReaderOrdersDao implements ReaderOrdersDao {
         if (reader == null || instance == null) {
             return false;
         }
+
+        int countInLibrary=0;
+        try (final Connection connection = OracleDAOFactory.getConnection();
+             final Statement statement = connection.createStatement();
+             final ResultSet rs = statement.executeQuery(
+                     "select count(id_book) as cnt from Instance " +
+                             "where id_book in (select b.id_b from Book b where b.name_b='" + instance.getBook().getName_b()
+                             + "') and publish='" + instance.getPublish()
+                             + "' group by id_book")) {
+            if (rs.next()) {
+                countInLibrary=rs.getInt("cnt");
+            }
+        } catch (SQLException e) {
+            logger.error("SQLException in counting instances", e);
+        }
+
+        int countInOrder=0;
+        try (final Connection connection = OracleDAOFactory.getConnection();
+             final Statement statement = connection.createStatement();
+             final ResultSet rs = statement.executeQuery(
+                     "select count(booko_id) as cnt from OrdNum " +
+                             "where booko_id in (select b.id_b from Book b where b.name_b='" + instance.getBook().getName_b()
+                             + "') and publish_o='" + instance.getPublish()
+                             + "' and numreader=" + reader.getId_r() + " group by booko_id")) {
+            if (rs.next()) {
+                countInOrder=rs.getInt("cnt");
+            }
+        } catch (SQLException e) {
+            logger.error("SQLException in countung instances in OrdNum", e);
+        }
+
+
+        if(countInOrder>=countInLibrary) {
+            logger.debug("not inserted new line, because of count limit");
+            return true;
+        }
+
         logger.debug("insertOrder");
         try(final Connection connection = OracleDAOFactory.getConnection();
             final Statement statement = connection.createStatement()){
 
             return statement.executeUpdate(
                     "insert into OrdNum (numreader, booko_id, publish_o) " +
-                            "values (" + reader.getId_r() + ", " + instance.getBook().getId_b() + ", '" + instance.getPublish() + "')") > 0;
+                            "values (" + reader.getId_r() + ", " + instance.getBook().getId_b() +
+                            ", '" + instance.getPublish() + "')") > 0;
 
         } catch (SQLException e) {
             logger.error("SQLException in insertion new Order", e);
@@ -121,9 +159,9 @@ public class OracleReaderOrdersDao implements ReaderOrdersDao {
     public List<Map.Entry<Instance, List<Author>>> getInstancesByReader(Reader r) {
         List<Map.Entry<Instance, List<Author>>> instances = new ArrayList<>();
         List<Instance> listOfOrders = getListOfOrdersByEmail(r.getEmail());
-        if(listOfOrders==null ) {
+        if(listOfOrders == null) {
             return new ArrayList<>();
-        };
+        }
         for (Instance inst:listOfOrders) {
             instances.add(Connections.getFactory().getInstanceDao().getInstanceById(inst.getId_i()));
         }
@@ -155,6 +193,7 @@ public class OracleReaderOrdersDao implements ReaderOrdersDao {
         if (bookCount.isEmpty()) {
             return new ArrayList<>(); // NULL было
         }
+
 
         logger.debug("get List of instances as Orders");
         for (Map.Entry entry: bookCount.entrySet()) {

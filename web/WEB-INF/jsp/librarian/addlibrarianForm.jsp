@@ -1,7 +1,6 @@
 <jsp:useBean id="reader" scope="request"
              type="main.java.controllers.model.Reader"/>
 
-
 <br>
 <h1><fmt:message key='librarianstatus'/>:</h1>
 <div class="row">

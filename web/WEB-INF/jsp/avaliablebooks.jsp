@@ -1,4 +1,5 @@
 <jsp:useBean id="instances" scope="request" type="java.util.List<java.util.Map<main.java.controllers.model.Instance, java.util.List<main.java.controllers.model.Author>> >"/>
+
 <br><h1><fmt:message key='List_of_books'/></h1><br>
 
 <div class="row">

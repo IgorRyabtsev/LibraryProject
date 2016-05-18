@@ -60,6 +60,11 @@ public class ReaderHistory extends HttpServlet {
         }
 
         final Reader reader = Connections.getFactory().getReaderDao().getReaderById(idReader);
+        if (reader==null) {
+            logger.error("Troubles with idReader");
+            response.sendError(400);
+            return;
+        }
         List<Orders> ordersByEmail = Connections.getFactory().getOrdersDao().getOrdersByEmail(reader.getEmail(),false);
         List<Map.Entry<Orders,List<Author>> > history = new ArrayList<>();
         for (Orders orders:ordersByEmail) {

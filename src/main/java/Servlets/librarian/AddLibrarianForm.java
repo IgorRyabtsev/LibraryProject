@@ -84,6 +84,11 @@ public class AddLibrarianForm extends HttpServlet {
             return;
         }
         final Reader reader = Connections.getFactory().getReaderDao().getReaderById(idReader);
+        if (reader==null) {
+            logger.error("Troubles with idReader");
+            response.sendError(400);
+            return;
+        }
         request.setAttribute("reader", reader);
         request.getRequestDispatcher("/WEB-INF/jsp/librarian/addlibrarianForm.jsp").forward(request, response);
     }

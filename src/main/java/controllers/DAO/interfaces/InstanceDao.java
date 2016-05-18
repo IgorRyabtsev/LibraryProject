@@ -35,7 +35,7 @@ public interface InstanceDao {
      * @param status book status=1 if exist in library, else 0
      * @return list of instances
      */
-    List<Map<Instance, List<Author>>> getInstanceByNameV2(String name, int status);
+    List<Map<Instance, List<Author>>> getInstanceByName(String name, int status);
 
     /**
      * Get Instance by condition: by author and book name

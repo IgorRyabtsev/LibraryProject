@@ -96,10 +96,11 @@ public class OracleOrdersDao implements OrdersDao {
     @Override
     public boolean giveBook(int id_r, Date date, Instance instance) {
         int exec;
+        PreparedStatement pstmt = null;
         logger.debug("Insert into Orders");
         try(final Connection connection = OracleDAOFactory.getConnection()){
 
-            final PreparedStatement pstmt = connection.prepareStatement("Insert into Orders (reader_id, instance_id, release_date," +
+            pstmt = connection.prepareStatement("Insert into Orders (reader_id, instance_id, release_date," +
                     " return_date) VALUES (?,?,?,null)");
             pstmt.setInt(1,id_r);
             pstmt.setInt(2,instance.getId_i());
@@ -109,6 +110,14 @@ public class OracleOrdersDao implements OrdersDao {
         } catch (SQLException e) {
             logger.error("SQLException insertion into Orders",e);
             return false;
+        } finally {
+            try {
+                if(pstmt!=null) {
+                    pstmt.close();
+                }
+            } catch (SQLException e) {
+                logger.error("SQLException giveBook can't close Prepared Statement ",e);
+            }
         }
 
         if(exec<1) {
@@ -125,7 +134,7 @@ public class OracleOrdersDao implements OrdersDao {
             logger.error("SQLException in updating \"status\"",e);
             return false;
         }
-        if(b==false) {
+        if(!b) {
             return false;
         }
         logger.debug("delete order from OrdNum");
@@ -133,7 +142,8 @@ public class OracleOrdersDao implements OrdersDao {
             final Statement statement = connection.createStatement()){
 
             return statement.executeUpdate(
-                    "delete from OrdNum where numreader=" + id_r + " and booko_id=" + instance.getBook().getId_b() + " and publish_o='" + instance.getPublish()+"' and rownum=1") > 0;
+                    "delete from OrdNum where numreader=" + id_r + " and booko_id=" + instance.getBook().getId_b() +
+                            " and publish_o='" + instance.getPublish()+"' and rownum=1") > 0;
 
         } catch (SQLException e) {
             logger.error("SQLException in delete order from OrdNum",e);
@@ -173,9 +183,10 @@ public class OracleOrdersDao implements OrdersDao {
     @Override
     public boolean takeBook(int id, Date date, String comments){
         int exec;
+        PreparedStatement pstmt = null;
         logger.debug("update Orders");
         try(final Connection connection = OracleDAOFactory.getConnection()){
-            PreparedStatement pstmt = connection.prepareStatement("update Orders set return_date = ? " +
+            pstmt = connection.prepareStatement("update Orders set return_date = ? " +
                     "where id_o=?" );
             pstmt.setDate(1,date);
             pstmt.setString(2,String.valueOf(id));
@@ -183,7 +194,16 @@ public class OracleOrdersDao implements OrdersDao {
         } catch (SQLException e) {
             logger.error("SQLException in updating Orders");
             return false;
+        } finally {
+            try {
+                if(pstmt!=null) {
+                    pstmt.close();
+                }
+            } catch (SQLException e) {
+                logger.error("SQLException in takeBook can't close Prepared Statement  ",e);
+            }
         }
+
         if(exec<1) {
             return false;
         }

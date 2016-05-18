@@ -35,7 +35,6 @@
                                         <td> ${hist.release_date}</td>
                                         <td> ${hist.return_date}</td>
                                     </tr>
-
                             </c:forEach>
                             </tbody>
                         </table>
@@ -81,6 +80,5 @@
         </div>
     </div>
     <!-- /.col-md-4 -->
-
 </div>
 <!-- /.row -->

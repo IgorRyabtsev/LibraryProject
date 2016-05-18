@@ -106,7 +106,7 @@ public class Registration extends HttpServlet {
         }
 
         final Reader newReader = new Reader(0,namef,names,namep,yearOfBirth,email,EncodingPassword.hash(password),"user");
-        if (Connections.getFactory().getReaderDao().insertReader(newReader) == false) {
+        if (!Connections.getFactory().getReaderDao().insertReader(newReader)) {
             logger.error("Trouble with insertion new Reader");
             response.sendError(400);
             return;

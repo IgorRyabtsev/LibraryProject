@@ -35,7 +35,7 @@ public class AllAvaliaBooks extends HttpServlet {
      * @throws IOException
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<Map<Instance, List<Author>>> allInstances = Connections.getFactory().getInstanceDao().getInstanceByNameV2(null,1);
+        List<Map<Instance, List<Author>>> allInstances = Connections.getFactory().getInstanceDao().getInstanceByName(null,1);
         request.setAttribute("instances",allInstances);
         request.getRequestDispatcher("/WEB-INF/jsp/avaliablebooks.jsp").forward(request, response);
     }

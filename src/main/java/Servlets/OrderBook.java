@@ -96,6 +96,7 @@ public class OrderBook extends HttpServlet {
             e.printStackTrace();
             return;
         }
+
         Map.Entry<Instance,List<Author>> instanceAuthorList = Connections.getFactory().getInstanceDao().getInstanceById(instanceId);
         request.setAttribute("instAuth", instanceAuthorList);
         request.getRequestDispatcher("/WEB-INF/jsp/orderbook.jsp").forward(request, response);

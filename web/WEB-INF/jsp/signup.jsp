@@ -64,7 +64,6 @@
                     </div>
                 </div>
                 <div id="success"></div>
-                <!-- For success/fail messages -->
                 <button type="submit" class="btn btn-info">Register</button>
             </form>
         </div>
@@ -107,6 +106,5 @@
                 </div>
             </div>
         </div>
-
     </div>
 

@@ -90,7 +90,7 @@ public class OracleInstanceDao implements InstanceDao {
      */
     @Override
     public List<Map<Instance, List<Author>>> getAll() {
-        return getInstanceByNameV2(null,0);
+        return getInstanceByName(null,0);
     }
 
     /**
@@ -100,13 +100,17 @@ public class OracleInstanceDao implements InstanceDao {
      * @return list of instances
      */
     @Override
-    public List<Map<Instance, List<Author>>> getInstanceByNameV2(String name, int status) {
+    public List<Map<Instance, List<Author>>> getInstanceByName(String name, int status) {
         String additional;
         if(name == null) {
             additional="";
         } else {
-            additional = "where name_b = '"+ name +"' and status  " + ((status==1) ? "=1" : ">=0");
+            additional = "and name_b = '"+ name +"' ";
         }
+        if(status==1) {
+            additional+= "and status =1";
+        }
+
         List<Map<Instance, List<Author>>> instances = new ArrayList<>();
 
         List<Instance> inst = new ArrayList<>();
@@ -115,7 +119,7 @@ public class OracleInstanceDao implements InstanceDao {
             final Statement statement = connection.createStatement();
             final ResultSet rs = statement.executeQuery(
                     "SELECT id_i, id_book, year_b, publish, cost, status, comments, name_b FROM Instance join Book on " +
-                            "id_book=id_b " + additional)) {
+                            "id_book=id_b where 1=1" + additional)) {
             while (rs.next()) {
                 inst.add(new Instance(rs.getInt("id_i"),
                         new Book(rs.getInt("id_book"),rs.getString("name_b")),
@@ -195,9 +199,8 @@ public class OracleInstanceDao implements InstanceDao {
             final ResultSet rs = statement.executeQuery(
                     "SELECT id_i, id_book, year_b, publish, cost, status, comments, name_b FROM (Instance join Book on " +
                             "id_book=id_b) " + additionalForBook+" 1=1 and id_b in " +
-                            "(select au.book_id from ((Author auth join AuBook au on auth.id_a=au.author_id) join Instance inst on " +
-                            "inst.id_book=au.book_id )" +
-                            additionalForAuthors + " 1=1)")) {
+                            "(select au.book_id from ((Author auth join AuBook au on auth.id_a=au.author_id) " +
+                            "join Instance inst on " + "inst.id_book=au.book_id )" + additionalForAuthors + " 1=1)")) {
             while (rs.next()) {
                 inst.add(new Instance(rs.getInt("id_i"),
                         new Book(rs.getInt("id_book"),rs.getString("name_b")),
@@ -219,8 +222,8 @@ public class OracleInstanceDao implements InstanceDao {
         try(final Connection connection = OracleDAOFactory.getConnection();
             final Statement statement = connection.createStatement();
             final ResultSet rs = statement.executeQuery(
-                    "SELECT id_a, name_f, name_s, name_p, year_a, id_b, name_b  FROM ((Book join AuBook on book_id=id_b) join Author on " +
-                            "id_a=author_id) " + additionalForAuthors + " 1=1")) {
+                    "SELECT id_a, name_f, name_s, name_p, year_a, id_b, name_b  FROM ((Book join AuBook on book_id=id_b) " +
+                            "join Author on " + "id_a=author_id) " + additionalForAuthors + " 1=1")) {
             while (rs.next()) {
                 authbooks.add(new AuthBook
                         (new Author(rs.getInt("id_a"),

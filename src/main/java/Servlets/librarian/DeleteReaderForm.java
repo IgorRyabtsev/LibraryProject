@@ -97,6 +97,11 @@ public class DeleteReaderForm extends HttpServlet {
         }
 
         final Reader readerById = Connections.getFactory().getReaderDao().getReaderById(idReader);
+        if (readerById==null) {
+            logger.error("Troubles with idReader");
+            response.sendError(400);
+            return;
+        }
         List<Orders> ordersByEmail = Connections.getFactory().getOrdersDao().getOrdersByEmail(readerById.getEmail(), true);
         request.setAttribute("orders",ordersByEmail);
         request.setAttribute("reader",String.valueOf(idReader));

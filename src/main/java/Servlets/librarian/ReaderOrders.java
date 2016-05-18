@@ -56,6 +56,11 @@ public class ReaderOrders extends HttpServlet {
             return;
         }
         final Reader readerById = Connections.getFactory().getReaderDao().getReaderById(idReader);
+        if (readerById==null) {
+            logger.error("Troubles with idReader");
+            response.sendError(400);
+            return;
+        }
         List<Map.Entry<Instance, List<Author>>> instancesByReader = Connections.getFactory().getReaderOrdersDao().getInstancesByReaderForLibrarian(readerById);
         request.setAttribute("instances",instancesByReader);
         request.setAttribute("readers",readerById);

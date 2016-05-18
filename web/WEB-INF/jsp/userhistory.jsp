@@ -12,7 +12,6 @@
                         <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                             <thead>
                             <tr>
-                                <%--<th><fmt:message key='author'/></th>--%>
                                 <th><fmt:message key='book'/></th>
                                 <th><fmt:message key='year'/></th>
                                 <th><fmt:message key='publish'/></th>
@@ -24,10 +23,6 @@
                             <tbody>
                             <c:forEach items="${history}" var="hist">
                                 <tr>
-                                    <%--<td><c:forEach items="${inst.value}" var="au">--%>
-                                        <%--${au.name_f} ${au.name_s} ${au.name_p} <br>--%>
-                                    <%--</c:forEach>--%>
-                                    </td>
                                     <td> ${hist.instance.book.name_b} </a></td>
                                     <td> ${hist.instance.year_b}</td>
                                     <td> ${hist.instance.publish}</td>
@@ -78,14 +73,12 @@
                                 </div>
                             </td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
-
     <!-- /.col-md-4 -->
 </div>
 <!-- /.row -->

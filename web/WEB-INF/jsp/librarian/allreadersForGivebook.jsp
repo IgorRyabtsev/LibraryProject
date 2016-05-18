@@ -45,7 +45,6 @@
                         <thead>
                         <tr>
                             <th><fmt:message key='allbooks.search'/></th>
-
                         </tr>
                         </thead>
                         <tbody>
@@ -62,7 +61,6 @@
                                 </div>
                             </td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>

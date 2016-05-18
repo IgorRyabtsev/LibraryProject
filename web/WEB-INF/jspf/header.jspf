@@ -5,14 +5,15 @@
 <html lang="ru">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <head>
-    <title><fmt:message key="Library_name"/></title>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
+
+    <title><fmt:message key="Library_name"/></title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Bootstrap -->
     <!-- Bootstrap core CSS -->
@@ -69,12 +70,9 @@
                         <%--<li><a href="/addlibrarian"><fmt:message key="order.librarian"/></a></li>--%>
                     <%--</c:if>--%>
 
-
-
-
                     <c:if test="${user_session.role .equals('librarian')}">
                         <li><a href="/addnewbook"><fmt:message key="order.addnewbook"/></a></li>
-                        <li><a href="/allreadersForGivebook"><fmt:message key="order.out"/></a></li>  <%--TODO: сделать завтра!--%>
+                        <li><a href="/allreadersForGivebook"><fmt:message key="order.out"/></a></li>
                         <li><a href="/allreaders"><fmt:message key="order.in"/></a></li>
                     </c:if>
 

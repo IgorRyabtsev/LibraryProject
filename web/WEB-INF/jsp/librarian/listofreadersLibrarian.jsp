@@ -15,7 +15,6 @@
                                 <th><fmt:message key='reader'/> </th>
                                 <th><fmt:message key='yearb'/></th>
                                 <th><fmt:message key='email'/></th>
-
                             </tr>
                             </thead>
                             <tbody>
@@ -45,7 +44,6 @@
                         <thead>
                         <tr>
                             <th><fmt:message key='allbooks.search'/></th>
-
                         </tr>
                         </thead>
                         <tbody>
@@ -62,14 +60,12 @@
                                 </div>
                             </td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
-
     <!-- /.col-md-4 -->
 </div>
 <!-- /.row -->
