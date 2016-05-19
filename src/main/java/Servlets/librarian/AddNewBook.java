@@ -70,6 +70,14 @@ public class AddNewBook extends HttpServlet {
             return;
         }
 
+        //too long bookname
+        if(bookname.length()>100) {
+            logger.debug("Too long book name.");
+            request.setAttribute("message","tooLongBookName");
+            doGet(request, response);
+            return;
+        }
+
         List<String> nameP = getPatronymic(namep);
         //some empty values
         if(bookname.trim().isEmpty() || publish.trim().isEmpty() || year.trim().isEmpty() ||
